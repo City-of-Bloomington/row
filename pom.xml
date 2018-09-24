@@ -6,7 +6,7 @@
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>row</name>
-    <url>https://github.com/City-of-Bloomington/row2</url>
+    <url>https://github.com/City-of-Bloomington/row</url>
 		<properties>
 		  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		</properties>
