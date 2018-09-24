@@ -1,0 +1,232 @@
+package planning;
+
+import java.util.*;
+import java.io.*;
+import java.text.*;
+import com.opensymphony.xwork2.ModelDriven;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import com.opensymphony.xwork2.ActionSupport;
+import org.apache.struts2.ServletActionContext;  
+import org.apache.struts2.dispatcher.SessionMap;  
+import org.apache.struts2.interceptor.SessionAware;  
+import org.apache.struts2.util.ServletContextAware;  
+import org.apache.log4j.Logger;
+/**
+ * legalit action class.
+ * @author Walid Sibo
+ * @version %I%, %G%
+ */
+
+public class SendOutAction extends ActionSupport implements SessionAware, ServletContextAware{
+
+	static final long serialVersionUID = 312L;	
+    static boolean debug = false;
+	static private String url="", url2="";		
+	String id = "", action="";
+	static Logger logger = Logger.getLogger(SendOutAction.class);
+	//
+	Citation citation = null;
+	List<Citation> citations = null;
+	CiteBatch batch = null;
+	List<CiteBatch> batches = null;
+	private Map<String, Object> sessionMap;
+	private ServletContext ctx;
+	private User user;
+	public String execute(){
+		String ret = INPUT;
+		String back = doPrepare();
+		if(!back.equals("")){
+			try{
+				HttpServletResponse res = ServletActionContext.getResponse();
+				String str = url+"Login";
+				res.sendRedirect(str);
+				return super.execute();
+			}catch(Exception ex){
+				System.err.println(ex);
+			}
+		}
+		if(action.startsWith("Process")){
+			batch.setProcess_by(user.getId());
+			back = batch.findCitations();
+			if(back.equals("") && batch.hasCitations()){
+				back = batch.doSave();
+				if(!back.equals("")){
+					addActionError(back);
+				}
+				else{
+					citations = batch.getCitations();
+					addLogs(citations, user);
+					try{
+						HttpServletResponse res = ServletActionContext.getResponse();
+						String str = url+"SendOut.do?id="+batch.getId()+"action=Regenerate";
+						res.sendRedirect(str);
+						return super.execute();
+					}catch(Exception ex){
+						System.err.println(ex);
+					}					
+					addActionMessage("Saved Successfully");
+					ret = SUCCESS;
+				}
+			}
+			else{
+				addActionMessage("No citations to process ");
+			}
+		}
+		else if(!id.equals("")){ // regenrate letters
+			ret = populate(); // returns SUCCESS
+		}
+		else{
+			getBatch();
+			back = batch.findCitations();
+			if(back.equals("") && batch.hasCitations()){
+				citations = batch.getCitations();
+			}
+			else{
+				addActionMessage("No citation available for processing.");
+			}
+		}
+      return ret;
+   }
+	/**
+	 * this method is used to get user and debug param
+	 */
+	String doPrepare(){
+		String back = "";
+		try{
+			user = (User)sessionMap.get("user");
+			if(user == null){
+				back = LOGIN;
+			}
+			if(url.equals("")){
+				String val = ctx.getInitParameter("debug");
+				if(val != null && val.equals("true")){
+					debug = true;
+				}
+				val = ctx.getInitParameter("url");
+				if(val != null)
+					url = val;
+				val = ctx.getInitParameter("url2");
+				if(val != null)
+					url2 = val;				
+			}
+		}catch(Exception ex){
+			System.out.println(ex);
+		}		
+		return back;
+	}
+	public CiteBatch getBatch(){ 
+		if(batch == null){
+			batch = new CiteBatch(debug);
+		}		
+		return batch;
+	}
+	public List<Citation> getCitations(){
+		if(citations == null && batch != null){
+			citations = batch.getCitations();
+		}
+		return citations;
+	}
+	public List<CiteBatch> getBatches(){
+		if(batches == null){
+			CiteBatchList ll = new CiteBatchList(debug);
+			String back = ll.find();
+			if(back.equals("")){
+				List<CiteBatch> ones = ll.getBatches();
+				if(ones != null && ones.size() > 0){
+					batches = ones;
+				}
+			}
+		}
+		return batches;
+	}	
+	
+	public void setBatch(CiteBatch val){
+		if(val != null)
+			batch = val;
+	}
+	public String getId(){
+		if(id.equals("") && batch != null){
+			id = batch.getId();
+		}
+		return id;
+	}
+	public void setAction(String val){
+		action = val;
+	}
+	public String getAction(){
+		return action;
+	}
+	public String getBatchesTitle(){
+		return "Most recent batches";
+	}	
+	public void setId(String val){
+		id = val;
+	}
+	public String populate(){
+		String ret = SUCCESS;
+		if(!id.equals("")){
+			batch = new CiteBatch(debug, id);
+			String back = batch.doSelect();
+			if(!back.equals("")){
+				addActionError(back);
+			}
+		}
+		return ret;
+	}
+	void addLogs(List<Citation> citations, User user){
+		for(Citation one:citations){
+			CiteLog clg = new CiteLog(debug,
+									  user,
+									  one,
+									  "legal action updated by Sendout batch");
+		}
+	}	
+	@Override  
+	public void setSession(Map<String, Object> map) {  
+		sessionMap=map;  
+	}
+	@Override  	
+	public void setServletContext(ServletContext ctx) {  
+        this.ctx = ctx;  
+    }  	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

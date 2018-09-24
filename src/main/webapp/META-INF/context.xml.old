@@ -1,0 +1,19 @@
+<Context reloadable="false" crossContext="true">
+   <Resource name="jdbc/MySQL_excav" auth="Container"
+       type="javax.sql.DataSource" 
+       username="row"
+			 password="h++pd"
+       driverClassName="com.mysql.jdbc.Driver"
+       url="jdbc:mysql://outlaw.bloomington.in.gov:3306/row" 
+       removeAbandoned="true"
+       removeAbandonedTimeout="600"
+			 testOnBorrow="true"
+			 validationQuery="select 1"
+			 maxTotal="6"
+			 maxIdle="6"
+			 removeAbandonedOnBorrow="true"
+			 maxActive="6"
+			 />
+   
+
+</Context> 

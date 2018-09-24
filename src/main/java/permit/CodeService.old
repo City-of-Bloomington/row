@@ -1,0 +1,171 @@
+package planning;
+
+import java.util.*;
+import java.sql.*;
+import java.io.*;
+import javax.sql.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.naming.*;
+import javax.naming.directory.*;
+import java.util.ArrayList;
+import java.util.List;
+ 
+import org.apache.log4j.Logger;
+/**
+ * The main data entry/view/update/delete form.
+ *
+ * @author Walid Sibo
+ * @version %I%, %G%
+ */
+
+public class CodeService extends HttpServlet{
+
+    String url="";
+    boolean debug = false, production = false;
+	static final long serialVersionUID = 182L;	
+	static Logger logger = Logger.getLogger(CodeService.class);
+    /**
+     * Generates the Group form and processes view, add, update and delete
+     * operations.
+     * @param req
+     * @param res
+     */
+    
+    public void doGet(HttpServletRequest req, 
+					  HttpServletResponse res) 
+		throws ServletException, IOException {
+		doPost(req,res);
+    }
+    /**
+     * @link #doGetost
+     */
+
+    public void doPost(HttpServletRequest req, 
+					   HttpServletResponse res) 
+		throws ServletException, IOException {
+    
+		String id = "";
+
+		//
+		String message="", action="";
+		res.setContentType("application/json");
+		PrintWriter out = res.getWriter();
+		String name, value;
+		String fullName="", term ="", type="", code_id="";
+		boolean success = true;
+		HttpSession session = null;
+		if(url.equals("")){
+			url    = getServletContext().getInitParameter("url");
+			//
+			String str = getServletContext().getInitParameter("debug");
+			if(str.equals("true")) debug = true;
+		}
+		Enumeration<String> values = req.getParameterNames();
+		String [] vals = null;
+		while (values.hasMoreElements()){
+			name = values.nextElement().trim();
+			vals = req.getParameterValues(name);
+			value = vals[vals.length-1].trim();	
+			if (name.equals("code_id")) { // this is what jquery sends
+				code_id = value;
+			}
+			else if (name.equals("action")){ 
+				action = value;  
+			}
+			else{
+				// System.err.println(name+" "+value);
+			}
+		}
+		ZoningCode code = null;
+		if(!code_id.equals("")){
+			ZoningCode one = new ZoningCode(debug, code_id);
+			String back = one.doSelect();
+			if(back.equals("")){
+				code = one;
+			}
+		}
+		if(code != null){
+			String json = writeJson(code);
+			out.println(json);
+		}
+		out.flush();
+		out.close();
+    }
+	/**
+	 * *************************
+	 *
+	 * json format as an array
+	  [
+	    {"value":"Walid Sibo",
+		  "id":"sibow",
+		  "dept":"ITS"
+		  },
+	    {"value":"schertza",
+		"id":"Alan Schertz",
+		"dept":"ITS"
+		}
+	   ]
+	   ***************************
+	 */
+	String writeJson(ZoningCode code){
+		String json="";
+		json = "{\"id\":\""+code.getId()+"\",\"fine\":\""+code.getFine()+"\",\"code\":\""+code.getCode()+"\"}";
+		return json;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

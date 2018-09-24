@@ -1,0 +1,31 @@
+
+<!-- 
+ * @copyright Copyright (C) 2014-2015 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author W. Sibo <sibow@bloomington.in.gov>
+ *
+ Note:
+ copy this file to context.xml file
+ replace url with your database url,
+ set database name, password.
+ if your not using mysql, you need to change the driverClassName
+	-->
+<Context reloadable="false" crossContext="true">
+  <Resource name="jdbc/MySQL_excav" auth="Container"
+						type="javax.sql.DataSource" 
+						username="row"
+						password="your password"
+						driverClassName="com.mysql.jdbc.Driver"
+						url="your database server" 
+						removeAbandoned="true"
+						removeAbandonedTimeout="600"
+						testOnBorrow="true"
+						validationQuery="select 1"
+						maxTotal="6"
+						maxIdle="6"
+						removeAbandonedOnBorrow="true"
+						maxActive="6"
+/>
+   
+
+</Context> 

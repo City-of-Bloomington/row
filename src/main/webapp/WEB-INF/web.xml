@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+ * @copyright Copyright (C) 2014-2015 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author W. Sibo <sibow@bloomington.in.gov>
+ *
+	-->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xmlns="http://java.sun.com/xml/ns/javaee" 
+		 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+    <display-name>ROW Permits</display-name>
+    <description>
+      This is version 1. of an application to perform
+      a wild and wonderful task, based on servlets and
+      JSP pages.  It was written by WS
+    </description>
+    <servlet>
+      <servlet-name>Login</servlet-name>
+      <servlet-class>permit.Login</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>PermitPdf</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.PermitPdf</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>InvoicePdf</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.InvoicePdf</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>ReceiptPdf</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.ReceiptPdf</servlet-class>
+    </servlet>	
+    <servlet>
+      <servlet-name>Logout</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.Logout</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>CompanyService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.CompanyService</servlet-class>
+    </servlet>	
+    <servlet>
+      <servlet-name>ContactService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.ContactService</servlet-class>
+    </servlet>
+	<servlet>
+      <servlet-name>PermitService</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.PermitService</servlet-class>
+    </servlet>
+	<servlet>
+      <servlet-name>PickPoint</servlet-name>
+      <description>
+      </description>
+      <servlet-class>permit.PickPoint</servlet-class>
+    </servlet>
+		<servlet>
+			<servlet-name>ExcavationService</servlet-name>
+			<description>
+			</description>
+			<servlet-class>permit.ExcavationService</servlet-class>
+    </servlet>	
+	
+   <servlet-mapping>
+     <servlet-name>Logout</servlet-name>
+     <url-pattern>/Logout</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>Login</servlet-name>
+     <url-pattern>/Login</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>PermitPdf</servlet-name>
+     <url-pattern>/PermitPdf</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>InvoicePdf</servlet-name>
+     <url-pattern>/InvoicePdf</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>ReceiptPdf</servlet-name>
+     <url-pattern>/ReceiptPdf</url-pattern>
+   </servlet-mapping>   
+   <servlet-mapping>
+     <servlet-name>CompanyService</servlet-name>
+     <url-pattern>/CompanyService</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>ContactService</servlet-name>
+     <url-pattern>/ContactService</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>PermitService</servlet-name>
+     <url-pattern>/PermitService</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>PickPoint</servlet-name>
+     <url-pattern>/PickPoint</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+     <servlet-name>ExcavationService</servlet-name>
+     <url-pattern>/ExcavationService</url-pattern>
+   </servlet-mapping>
+  <filter>
+    <filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+  </filter>	
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+	<filter>
+    <filter-name>CAS Authentication Filter</filter-name>
+    <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>CAS Validation Filter</filter-name>
+    <filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+    <init-param>
+      <param-name>artifactParameterName</param-name>
+      <param-value>ticket</param-value>
+    </init-param>
+    <init-param>
+      <param-name>redirectAfterValidation</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+    <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+  </filter>
+
+	<filter-mapping> 
+    <filter-name>CAS Authentication Filter</filter-name> 
+      <url-pattern>/Login</url-pattern> 
+    </filter-mapping> 
+  <filter-mapping> 
+    <filter-name>CAS Validation Filter</filter-name> 
+      <url-pattern>/Login</url-pattern> 
+  </filter-mapping>
+  <filter-mapping> 
+    <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name> 
+    <url-pattern>/Login</url-pattern> 
+  </filter-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>		
+	</welcome-file-list>
+<!--
+	<listener>
+    <listener-class>
+			org.quartz.ee.servlet.QuartzInitializerListener
+	  </listener-class>
+  </listener>
+	-->
+  <session-config>
+    <session-timeout>120</session-timeout>
+  </session-config>
+
+
+</web-app>
