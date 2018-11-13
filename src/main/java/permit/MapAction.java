@@ -23,7 +23,8 @@ public class MapAction extends TopAction{
 		static final long serialVersionUID = 233L;	
 		String excavation_id="";
 		static Logger logger = LogManager.getLogger(MapAction.class);
-		Address address = null; 
+		Address address = null;
+		ApiKey key = null;
 		public String execute(){
 				String ret = INPUT;
 				String back = doPrepare();
@@ -103,7 +104,26 @@ public class MapAction extends TopAction{
 				}
 				return ret;
 		}
-
+		public ApiKey getKey(){
+				ApiKeyList akl = new ApiKeyList();
+				akl.setActiveOnly();
+				String back = akl.find();
+				if(back.equals("")){
+						List<ApiKey> keys = akl.getKeys();
+						if(keys != null && keys.size() > 0){
+								key = keys.get(0);
+						}
+				}
+				return key;
+		}
+		public String getKeyValue(){
+				String ret = "";
+				getKey();
+				if(key != null){
+						ret = key.getValue();
+				}
+				return ret;
+		}
 
 }
 

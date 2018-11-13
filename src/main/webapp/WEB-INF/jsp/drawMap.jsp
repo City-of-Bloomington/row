@@ -47,7 +47,8 @@
 		</tr>
   </table>
 </s:form>
-<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>	
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<s:property value='key' />" type="text/javascript"></script>	
 <script>
 var marker = null;
   var myStyles =[{

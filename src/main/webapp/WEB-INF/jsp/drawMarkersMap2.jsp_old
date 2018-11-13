@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@  include file="header.jsp" %>
-  
+  // <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
+	
 <div id="map" style="width: 500px; height: 400px"></div>
 <br />
 <h3>Excavation Locations </h3>
 <p>Note: you can click on any marker to show more info</p>
 <ul id="ul_div">
-	<s:iterator value="excavations" status="addrStatus" >
+	<s:iterator value="cuts" status="addrStatus" >
 		<li class="loc_temp"><s:property value="address" /> (<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />)</li>
 	</s:iterator>
 </ul>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>	
 <script>
 var addresses = [
-	<s:iterator value="excavations" status="addrStatus" >
+	<s:iterator value="cuts" status="addrStatus" >
 	['<s:property value="address" />',<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />,<s:property value="utility_type_id" />,'<s:property value="status" />','<s:property value="permit.company" />','<s:property value="permit_num" />']
 	<s:if test="!#addrStatus.last" >,</s:if>
 	</s:iterator>
@@ -45,7 +46,7 @@ function initialize() {
     var mapOptions = {
 		styles: myStyles,
 		zoom:16,
-		center: new google.maps.LatLng(<s:property value="%{address.loc_lat}" />,<s:property value="%{address.loc_long}" />)
+		center: new google.maps.LatLng(<s:property value="%{midPoint.loc_lat}" />,<s:property value="%{midPoint.loc_long}" />)
     };
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	

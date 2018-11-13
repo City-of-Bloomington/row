@@ -15,7 +15,8 @@ import org.apache.logging.log4j.Logger;
 public class ApiKeyList{
 
 		static Logger logger = LogManager.getLogger(ApiKeyList.class);
-		static final long serialVersionUID = 203L;	
+		static final long serialVersionUID = 203L;
+		boolean active_only = false;
 		List<ApiKey> keys = null;
     String errors = "";
     public ApiKeyList(){
@@ -27,6 +28,9 @@ public class ApiKeyList{
 		public List<ApiKey> getKeys(){
 				return keys;
 		}
+		public void setActiveOnly(){
+				active_only = true;
+		}
 	
 		public String find(){
 		
@@ -36,6 +40,9 @@ public class ApiKeyList{
 				Connection con = null;
 				Statement stmt = null;
 				ResultSet rs = null;
+				if(active_only){
+						qq += " where inactive is null ";
+				}
 				logger.debug(qq);
 				try{
 						con = Helper.getConnection();
@@ -50,8 +57,9 @@ public class ApiKeyList{
 						while(rs.next()){
 								String str = rs.getString(1);
 								String str2 = rs.getString(2);
+								String str3 = rs.getString(3);								
 								if(str != null && str2 != null){
-										ApiKey one = new ApiKey(str, str2);
+										ApiKey one = new ApiKey(str, str2, str3 != null);
 										keys.add(one);
 								}
 						}

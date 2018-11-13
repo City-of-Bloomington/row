@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ApiKey{
 
-    String name="", value="";
+    String name="", value="",inactive="";
 		static Logger logger = LogManager.getLogger(ApiKey.class);
 		static final long serialVersionUID = 202L;	
 
@@ -20,7 +20,12 @@ public class ApiKey{
     public ApiKey(String val, String val2){
 				setName(val);
 				setValue(val2);
-    }	
+    }
+    public ApiKey(String val, String val2, boolean val3){
+				setName(val);
+				setValue(val2);
+				setInactive(val3);
+    }			
     public ApiKey(){
     }
 		//
@@ -34,6 +39,12 @@ public class ApiKey{
 		public String getValue(){
 				return value;
     }
+		public boolean isActive(){
+				return inactive.equals("");
+		}
+		public boolean isInactive(){
+				return !inactive.equals("");
+		}		
 		
 		boolean hasErrors(){
 				return !errors.equals("");
@@ -47,6 +58,10 @@ public class ApiKey{
 				if(val != null)
 						name = val;
 		}
+		public void setInactive(boolean val){
+				if(val)
+						inactive = "y";
+		}		
 	
 		public String toString(){
 				return value;
@@ -65,7 +80,7 @@ public class ApiKey{
 						return msg;
 				}
 				try {
-						qq = "select value from api_keys where name=? "; 
+						qq = "select value,inactive from api_keys where name=? "; 
 						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, name);
@@ -73,6 +88,7 @@ public class ApiKey{
 						//
 						if(rs.next()){
 								setValue(rs.getString(1));
+								setInactive(rs.getString(2) != null);
 						}
 						else{
 								msg = "No record found for name "+name;

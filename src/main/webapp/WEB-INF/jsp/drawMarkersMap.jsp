@@ -1,36 +1,44 @@
 <%@  include file="header.jsp" %>
-<!-- 
- * @copyright Copyright (C) 2014-2015 City of Bloomington, Indiana. All rights reserved.
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author W. Sibo <sibow@bloomington.in.gov>
- *
-	-->
-<h3>Excavation Locations </h3>
-<s:if test="hasActionMessages()">
+
+<h3>Excavations Location Map</h3>
+<s:if test="hasActionErrors()">
+	<div class="errors">
+		<s:actionerror/>
+	</div>
+</s:if>
+<s:elseif test="hasActionMessages()">
 	<div class="welcome">
 		<s:actionmessage/>
-	</div>
-</s:if>  
+  </div>
+</s:elseif>
+<p>Note: you can click on each marker to show the related info</p>
+<s:if test="hasCuts()">
+	<!-- 
+	<ul>
+		<s:iterator value="cuts" var="one" status="addrStatus" >
+			<li><s:property value="address" /> (<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />)</li>
+		</s:iterator>
+	</ul>
+	-->
+</s:if>
 <div id="map" style="width: 700px; height: 500px"></div>
 <br />
 <%@  include file="colorScheme.jsp" %>  
 
-<p>Note: you can click on each marker to show the related info</p>
-<!--  
-<ul>
-<s:iterator value="excavations" status="addrStatus" >
-<li><s:property value="address" /> (<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />)</li>
-</s:iterator>
-</ul>
--->
 <script src="https://maps.googleapis.com/maps/api/js?key=<s:property value='key' />" type="text/javascript"></script>	
 <script>
 var addresses = [
-	<s:iterator value="excavations" status="addrStatus" >
-	[<s:property value="id" />,"<s:property value="address" />",<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />,<s:property value="utility_type_id" />,"<s:property value="status" />","<s:property value="permit.company" />","<s:property value="permit_num" />"]
-	<s:if test="!#addrStatus.last">,</s:if>
-  </s:iterator>
+	<s:if test="hasCuts()">
+		<s:iterator value="cuts" status="addrStatus" >
+			[<s:property value="id" />,"<s:property value='address' />",<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />,<s:property value="utility_type_id" />,"<s:property value='status' />","<s:property value='permit.company' />","<s:property value='permit_num' />"]<s:if test="!#addrStatus.last">,</s:if>
+		</s:iterator>
+	</s:if>
 ];
+
+	var midPoint = [];
+	midPoint[0] = addresses[0][2];
+	midPoint[1] = addresses[0][3];
+
 var marker = null;
 var colors = ['orange-dot.png','pink-dot.png','yellow-dot.png','ltblue-dot.png','green-dot.png','red-dot.png','blue-dot.png','purple-dot.png'];
 var myStyles =[{
@@ -43,7 +51,7 @@ function initialize() {
   var mapOptions = {
     styles: myStyles,
 		zoom:16,
-    center: new google.maps.LatLng(<s:property value="%{address.loc_lat}" />,<s:property value="%{address.loc_long}" />)
+    center: new google.maps.LatLng(midPoint[0],midPoint[1])
   };
   var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	
@@ -84,6 +92,8 @@ function attachMessage(marker, addr) {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>  
+
+
 <%@  include file="footer.jsp" %>
 
 

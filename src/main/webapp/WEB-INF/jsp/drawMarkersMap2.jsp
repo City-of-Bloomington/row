@@ -28,7 +28,7 @@
 <script>
 
 var addresses = [
-	<s:iterator value="excavations" status="addrStatus" >
+	<s:iterator value="cuts" status="addrStatus" >
 	["<s:property value="id" />", "<s:property value="address" />",<s:property value="address.loc_lat" />,<s:property value="address.loc_long" />,<s:property value="utility_type_id" />,"<s:property value="status" />","<s:property value="permit.company" />","<s:property value="permit_num" />"]
 	<s:if test="!#addrStatus.last" >,</s:if>
 	</s:iterator>
@@ -71,7 +71,7 @@ function initialize() {
     var mapOptions = {
 		styles: myStyles,
 		zoom:16,
-		center: new google.maps.LatLng(<s:property value="%{address.loc_lat}" />,<s:property value="%{address.loc_long}" />)
+		center: new google.maps.LatLng(<s:property value="%{midPoint.loc_lat}" />,<s:property value="%{midPoint.loc_long}" />)
     };
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	

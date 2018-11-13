@@ -26,6 +26,7 @@ public class ExcavationSearchAction extends TopAction{
 		List<Type> utility_types = null;
 		List<Address> addresses = null;
 		ExcavationList excavList = null;
+		Address midPoint = null;
 		String excavationsTitle = "Most recent excavations";
 		ApiKey key = null;
 		public String execute(){
@@ -37,6 +38,7 @@ public class ExcavationSearchAction extends TopAction{
 						excavList.ensureAddress();
 						back = excavList.find();
 						if(!back.equals("")){
+								System.err.println(" error "+back);
 								addActionError(back);
 						}
 						else{
@@ -45,16 +47,18 @@ public class ExcavationSearchAction extends TopAction{
 								if(list.size() > 80){
 										excavations = list.subList(0,80);
 										addActionMessage("Matched "+list.size()+" showing the first 80 because of google map limits ");
-										addresses = addrList.subList(0,80);					
+										addresses = addrList.subList(0,80);
 								}
 								else{
 										excavations = list;
 										addresses = addrList;
 								}
 								if(excavList.coordsOnly()){
+										getPoint();
 										ret = "map2"; // resizeable map
 								}
 								else{
+										getPoint();
 										ret = "map";
 								}
 						}
@@ -93,27 +97,16 @@ public class ExcavationSearchAction extends TopAction{
 								}
 						}
 				}
-				/*
-				else{
-						ExcavationList bl = new ExcavationList();
-						back = bl.find();
-						if(back.equals("")){
-								List<Excavation> ones = bl.getExcavations();
-								if(ones != null && ones.size() > 0){
-										excavations = ones;
-										addresses = bl.getAddresses();
-								}
-						}
-						else{
-								addActionError(back);
-						}
-				}
-				*/
 				return ret;
 		}
 		public boolean hasExcavations(){
+				
 				return excavations != null && excavations.size() > 0;
 		}
+		public boolean hasCuts(){
+				
+				return excavations != null && excavations.size() > 0;
+		}		
 		public ExcavationList getExcavList(){ 
 				if(excavList == null){
 						excavList = new ExcavationList();
@@ -123,6 +116,9 @@ public class ExcavationSearchAction extends TopAction{
 		public List<Excavation> getExcavations(){
 				return excavations;
 		}
+		public List<Excavation> getCuts(){
+				return excavations;
+		}		
 		public boolean hasAddresses(){
 				return addresses != null && addresses.size() > 0;
 		}
@@ -133,19 +129,27 @@ public class ExcavationSearchAction extends TopAction{
 		// this is the center point for the list of addresses
 		// to draw the map around it
 		//
-		public Address getAddress(){
-				double lat=0, lng=0;
-				if(addresses != null && addresses.size() > 0){
-						for(Address addr:addresses){
-								lat += addr.getLoc_lat_dbl();
-								lng += addr.getLoc_long_dbl();
+		public Address getPoint(){
+				System.out.println(" address called ");
+				if(midPoint == null){
+						double lat=0, lng=0;
+						int size = 1;
+						if(addresses != null && addresses.size() > 0){
+								if(addresses.size() > 0){
+										size = addresses.size();
+								}
+								for(Address addr:addresses){
+										lat += addr.getLoc_lat_dbl();
+										lng += addr.getLoc_long_dbl();
+								}
+								lat = lat /(size);
+								lng = lng /(size);
 						}
-						lat = lat /(addresses.size());
-						lng = lng /(addresses.size());
 						Address addr = new Address(" ", " ",""+lat,""+lng);
-						return addr;
+						midPoint = addr;
 				}
-				return new Address();
+				System.out.println(" point "+midPoint);
+				return midPoint;
 		}
 		public String getExcavationsTitle(){
 				return excavationsTitle;
@@ -162,6 +166,7 @@ public class ExcavationSearchAction extends TopAction{
 		}
 		public ApiKey getKey(){
 				ApiKeyList akl = new ApiKeyList();
+				akl.setActiveOnly();
 				String back = akl.find();
 				if(back.equals("")){
 						List<ApiKey> keys = akl.getKeys();
