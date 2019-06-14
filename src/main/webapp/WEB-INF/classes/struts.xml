@@ -36,6 +36,13 @@
 				<result name="input">/WEB-INF/jsp/contact.jsp</result>
 				<result name="error">/WEB-INF/jsp/contact.jsp</result>		
       </action>
+      <action name="user" 
+              class="permit.UserAction" 
+              method="execute">
+				<result>/WEB-INF/jsp/user.jsp</result> 
+				<result name="input">/WEB-INF/jsp/user.jsp</result>
+				<result name="error">/WEB-INF/jsp/user.jsp</result>		
+      </action>			
       <action name="reschedule" 
               class="permit.RescheduleAction" 
               method="execute">

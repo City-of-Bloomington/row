@@ -74,7 +74,7 @@ public abstract class TopAction extends ActionSupport implements SessionAware, S
 						setUrls();
 						if(user == null){
 								HttpServletResponse res = ServletActionContext.getResponse();
-								String str = url+"Login";
+								String str = "/row/Login";
 								res.sendRedirect(str);
 								return super.execute();
 						}								
@@ -96,7 +96,7 @@ public abstract class TopAction extends ActionSupport implements SessionAware, S
 				String host_forward = request.getHeader("X-Forwarded-Host");
 				String host = request.getHeader("host");				
 				if(host_forward != null){
-						// System.err.println(" host forward "+host_forward);
+						// System.err.println(" forward "+host_forward);
 						url = host_forward+"/row/";
 				}
 				else if(host != null){

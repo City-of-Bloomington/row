@@ -22,7 +22,8 @@ public class ReportStatsAction extends TopAction{
 		ReportStats report = null;
 		List<String> years = null;
 		public String execute(){
-				String ret = INPUT;            // default
+				String ret = INPUT;
+				doPrepare(); 
 				if(action.equals("Submit")){
 						ret = SUCCESS;
 						String back = report.find();

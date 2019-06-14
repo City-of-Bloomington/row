@@ -27,16 +27,6 @@ public class InvoiceAction extends TopAction{
 		public String execute(){
 				String ret = INPUT;
 				String back = doPrepare();
-				if(!back.equals("")){
-						try{
-								HttpServletResponse res = ServletActionContext.getResponse();
-								String str = url+"Login";
-								res.sendRedirect(str);
-								return super.execute();
-						}catch(Exception ex){
-								System.err.println(ex);
-						}
-				}
 				if(action.equals("Save")){
 						ret = SUCCESS;
 						invoice.setUser_id(user.getId());

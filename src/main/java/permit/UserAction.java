@@ -16,34 +16,32 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger; 
 
-public class ReceiptAction extends TopAction{
+public class UserAction extends TopAction{
 
 		static final long serialVersionUID = 205L;	
 
-		String invoice_id="";
 		static Logger logger = LogManager.getLogger(ReceiptAction.class);
 		//
-		Receipt receipt = null; 
+		User rowUser = null;
+		List<User> users = null;
 		public String execute(){
 				String ret = INPUT;
 				String back = doPrepare();
 				if(action.equals("Save")){
 						ret = SUCCESS;
-						receipt.setUser_id(user.getId());
-						back = receipt.doSave();
+						back = rowUser.doSave();
 						if(!back.equals("")){
 								addActionError(back);
 						}
 						else{
-								id = receipt.getId();
+								id = rowUser.getId();
 								//
 								addActionMessage("Saved Successfully");
 						}
 				}
 				else if(action.equals("Update")){
 						ret = SUCCESS;			
-						receipt.setUser_id(user.getId());
-						back = receipt.doUpdate();
+						back = rowUser.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
 						}
@@ -51,17 +49,11 @@ public class ReceiptAction extends TopAction{
 								addActionMessage("Updated Successfully");
 						}
 				}
-				else if(action.startsWith("Print")){
-						populate();
-						try{
-								HttpServletResponse res = ServletActionContext.getResponse();
-								String str = url+"ReceiptPdf?action=Print&id="+receipt.getId();
-								res.sendRedirect(str);
-								return super.execute();
-						}catch(Exception ex){
-								System.err.println(ex);
-						}
-				}			
+				else if(action.startsWith("New")){
+						ret = SUCCESS;
+						id = "";
+						getRowUser();
+				}
 				else if(!id.equals("")){
 						ret = populate();
 				}
@@ -69,45 +61,48 @@ public class ReceiptAction extends TopAction{
 				return ret;
 		}
 
-		public Receipt getReceipt(){ 
-				if(receipt == null){
-						receipt = new Receipt();
-						if(!invoice_id.equals("")){
-								receipt.setInvoice_id(invoice_id);
-						}
+		public User getRowUser(){ 
+				if(rowUser == null){
+						rowUser = new User();
 				}		
-				return receipt;
+				return rowUser;
 		}
 		//
 
-		public void setReceipt(Receipt val){
+		public void setRowUser(User val){
 				if(val != null)
-						receipt = val;
+						rowUser = val;
 		}
 
 		public String getId(){
-				if(id.equals("") && receipt != null){
-						id = receipt.getId();
+				if(id.equals("") && user != null){
+						id = rowUser.getId();
 				}
 				return id;
 		}
 
 
-		public String getReceiptsTitle(){
-				return "Most recent receipts";
+		public String getUsersTitle(){
+				return "Current users";
 		}
-
-
-		public void setInvoice_id(String val){
-				if(val != null)
-						invoice_id = val;
-		}	
-
+		public List<User> getUsers(){
+				if(users == null){
+						UserList ul = new UserList();
+						String back = ul.find();
+						if(back.equals("")){
+								users = ul.getUsers();
+						}
+						else{
+								addActionError(back);
+						}
+				}
+				return users;
+		}
 		public String populate(){
 				String ret = SUCCESS;
 				if(!id.equals("")){
-						receipt = new Receipt(id);
-						String back = receipt.doSelect();
+						rowUser = new User(id);
+						String back = rowUser.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
 						}

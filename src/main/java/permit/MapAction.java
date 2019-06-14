@@ -28,17 +28,7 @@ public class MapAction extends TopAction{
 		public String execute(){
 				String ret = INPUT;
 				String back = doPrepare();
-				if(!back.equals("")){
-						try{
-								HttpServletResponse res = ServletActionContext.getResponse();
-								String str = url+"Login";
-								res.sendRedirect(str);
-								return super.execute();
-						}catch(Exception ex){
-								System.err.println(ex);
-						}
-				}
-				else if(action.equals("Update")){
+				if(action.equals("Update")){
 						ret = SUCCESS;			
 						address.setUser_id(user.getId());
 						back = address.doUpdate();

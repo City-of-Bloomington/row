@@ -21,16 +21,6 @@ public class WelcomeAction extends TopAction{
 		public String execute(){
 				String ret = SUCCESS;
 				doPrepare();
-				if(user == null){
-						try{
-								HttpServletResponse res = ServletActionContext.getResponse();
-								String str = url+"Login";
-								res.sendRedirect(str);
-								return super.execute();
-						}catch(Exception ex){
-								System.err.println(ex);
-						}
-				}
 				return ret;
 		}
 

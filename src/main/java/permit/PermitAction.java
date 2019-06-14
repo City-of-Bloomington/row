@@ -32,17 +32,6 @@ public class PermitAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				//
-				// any body should be able to access, but who want to edit must login
-				if(!action.equals("") && user == null){
-						try{
-								HttpServletResponse res = ServletActionContext.getResponse();
-								String str = url+"Login";
-								res.sendRedirect(str);
-								return super.execute();
-						}catch(Exception ex){
-								System.err.println(ex);
-						}
-				}
 				if(action.equals("Save")){
 						ret = SUCCESS;
 						permit.setUser_id(user.getId());

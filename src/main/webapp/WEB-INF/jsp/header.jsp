@@ -42,7 +42,7 @@
 		  </div>
 		  <s:if test="#session != null && #session.user != null">				
 			<div class="menuLinks closed">
-			  <a href="<s:property value='#application.url'/>logout.action">Logout</a>
+			  <a href="<s:property value='#application.url'/>Logout">Logout</a>
 			</div>
 		  </s:if>
         </nav>
@@ -54,7 +54,8 @@
 				<a href="<s:property value='#application.url'/>type.action">Edit Categories</a>
 				<a href="<s:property value='#application.url'/>statsReport.action">Stats Reports</a>
 				<a href="<s:property value='#application.url'/>report.action">Detailed Reports</a>
-				<a href="<s:property value='#application.url'/>reschedule.action">Reschedule Notifications</a>				
+				<a href="<s:property value='#application.url'/>reschedule.action">Reschedule Notifications</a>
+				<a href="<s:property value='#application.url'/>user.action">Users</a>
 			  </div>
 			</nav>
 		  </s:if>

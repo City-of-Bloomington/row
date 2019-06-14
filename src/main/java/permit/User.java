@@ -97,7 +97,15 @@ public class User implements java.io.Serializable{
     public void setActive(String val){
 				if(val != null)
 						active = val;
-    }	
+    }
+    public void setActiveStatus(boolean val){
+				if(val)
+						active = "y";
+    }
+		public boolean getActiveStatus(){
+				if(id.equals("")) active="y";
+				return !active.equals("");
+		}
 		public boolean userExists(){
 				return userExists;
 		}
@@ -116,10 +124,33 @@ public class User implements java.io.Serializable{
 		public String getActive(){
 				return active;
 		}
+		@Override
     public String toString(){
 				if(fullName.equals("")) return empid;
 				else return fullName;
     }
+		@Override
+		public int hashCode(){
+				int seed = 37;
+				if(!id.equals("")){
+						try{
+								seed += Integer.parseInt(id)*13;
+						}catch(Exception ex){
+
+						}
+				}
+				return seed;
+		}
+		@Override
+		public boolean equals(Object obj){
+				if (obj == this) { 
+            return true; 
+        }
+				if(!(obj instanceof User)) return false;
+				User user2 = (User)obj;
+				return user2.getId().equals(id);
+		}
+		
 		public String doSelect(){
 		
 				String msg="", qq="";
@@ -165,5 +196,99 @@ public class User implements java.io.Serializable{
 				}
 				return msg;
 		}
+		public String doSave(){
+		
+				String msg = "";
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				if(empid.equals("")){
+						msg = " username not set ";
+						return msg;
+				}
+				if(fullName.equals("")){
+						msg = " full name not set";
+						return msg;
+				}
+				String qq = "insert into users values (0,?,?,?,'y')";
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				try {
+						logger.debug(qq);			
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1, empid);
+						pstmt.setString(2, fullName);
+						if(role.equals(""))
+								pstmt.setNull(3, Types.INTEGER);
+						else
+								pstmt.setString(3, role);
+						pstmt.executeUpdate();
+						qq = "select LAST_INSERT_ID() ";
+						logger.debug(qq);
+						pstmt = con.prepareStatement(qq);			
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								id = rs.getString(1);
+						}			
+				}
+				catch (Exception ex){
+						msg += ex+":"+qq;
+						logger.error(ex+":"+qq);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				return msg;
+    }
+		public String doUpdate(){
+		
+				String msg = "";
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				if(empid.equals("")){
+						msg = " username not set ";
+						return msg;
+				}
+				if(fullName.equals("")){
+						msg = " full name not set";
+						return msg;
+				}
+				String qq = "update users set empid=?,fullname=?,role=?,active=? where id=? ";
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				try {
+						logger.debug(qq);			
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1, empid);
+						pstmt.setString(2, fullName);
+						if(role.equals(""))
+								pstmt.setNull(3, Types.INTEGER);
+						else
+								pstmt.setString(3, role);
+						if(active.equals(""))
+								pstmt.setNull(4, Types.CHAR);
+						else
+								pstmt.setString(4, "y");
+						pstmt.setString(5, id);
+						pstmt.executeUpdate();
+				}
+				catch (Exception ex){
+						msg += ex+":"+qq;
+						logger.error(ex+":"+qq);
+				}
+				finally{
+						Helper.databaseDisconnect(con, pstmt, rs);
+				}
+				return msg;
+    }			
 	
 }

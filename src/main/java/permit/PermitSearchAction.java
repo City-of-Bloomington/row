@@ -29,8 +29,6 @@ public class PermitSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				//
-				// everybody should be able to access this
-				//
 				if(!action.equals("")){
 						permitList.setNoLimit();
 						back = permitList.find();

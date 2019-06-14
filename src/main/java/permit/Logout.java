@@ -33,7 +33,10 @@ public class Logout extends HttpServlet{
 				if(session != null){
 						session.invalidate();
 				}
-				res.sendRedirect(cas_url+"?url="+url);
+				if(url.indexOf("localhost") == -1)
+						res.sendRedirect(cas_url+"?url="+url);
+				else
+						res.sendRedirect(url+"Login");
 				return;
     }
 

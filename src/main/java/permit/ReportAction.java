@@ -27,10 +27,11 @@ public class ReportAction extends TopAction{
 		List<Type> report_types = null;
 		//
 		public String execute(){
+				String back = doPrepare();
 				String ret = INPUT;            // default
 				if(action.equals("Submit")){
 						ret = SUCCESS;
-						String back = report.find();
+						back = report.find();
 						if(!back.equals("")){
 								addActionError(back);
 								ret = INPUT;

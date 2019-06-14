@@ -29,9 +29,6 @@ public class ExcavationAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				///
-				/// everybody should be able to access,
-				/// except those who want to edit
-				/// must login
 				if(!action.equals("") && user == null){
 						try{
 								HttpServletResponse res = ServletActionContext.getResponse();
