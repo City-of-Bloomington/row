@@ -200,7 +200,7 @@ public class User implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(empid.equals("")){
 						msg = " username not set ";
@@ -227,10 +227,11 @@ public class User implements java.io.Serializable{
 						else
 								pstmt.setString(3, role);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -240,7 +241,7 @@ public class User implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }
@@ -265,8 +266,8 @@ public class User implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);							
 				try {
-						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, empid);
 						pstmt.setString(2, fullName);

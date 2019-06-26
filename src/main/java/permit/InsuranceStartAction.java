@@ -30,10 +30,12 @@ public class InsuranceStartAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Next")){
 						ret = SUCCESS;
+						logger.debug("insurance start action ");		
 						start.setUser_id(user.getId());
 						back = start.doNext();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("insurance start action "+back);		
 						}
 						else{
 								if(!start.getNeedMore()){
@@ -98,8 +100,13 @@ public class InsuranceStartAction extends TopAction{
 		public List<Insurance> getInsurances(){
 				InsuranceList bl = new InsuranceList();
 				String back = bl.find();
-				if(back.equals("") && bl.getInsurances() != null){
-						insurances = bl.getInsurances();
+				if(back.equals("")){
+						if(bl.getInsurances() != null){
+								insurances = bl.getInsurances();
+						}
+				}
+				else{
+						logger.debug("insurance start action "+back);		
 				}
 				return insurances;
 		}	

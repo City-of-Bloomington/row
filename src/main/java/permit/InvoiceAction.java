@@ -28,11 +28,13 @@ public class InvoiceAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				if(action.equals("Save")){
+						logger.error("invoice action save");
 						ret = SUCCESS;
 						invoice.setUser_id(user.getId());
 						back = invoice.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error("invoice action "+back);
 						}
 						else{
 								id = invoice.getId();
@@ -41,11 +43,13 @@ public class InvoiceAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.error("invoice action update");
 						invoice.setUser_id(user.getId());
 						back = invoice.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error("invoice action "+back);
 						}
 						else{
 								addActionMessage("Updated Successfully");
@@ -118,6 +122,7 @@ public class InvoiceAction extends TopAction{
 						String back = invoice.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error("invoice action pop "+back);
 						}
 				}
 				return ret;

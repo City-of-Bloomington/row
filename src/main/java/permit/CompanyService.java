@@ -70,6 +70,7 @@ public class CompanyService extends HttpServlet{
 								// System.err.println(name+" "+value);
 						}
 				}
+				logger.debug(" comp service ");
 				CompanyList cl = null;
 				List<Company> list = null;
 				if(!name_str.equals("")){
@@ -81,8 +82,12 @@ public class CompanyService extends HttpServlet{
 						if(back.equals("")){
 								list = cl.getCompanies();
 						}
+						else{
+								logger.debug(" comp service "+back);
+						}
 				}
 				if(list != null && list.size() > 0){
+						logger.debug(" comp service write json ");
 						String json = writeJson(list);
 						out.println(json);
 				}

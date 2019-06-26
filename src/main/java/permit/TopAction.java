@@ -58,6 +58,7 @@ public abstract class TopAction extends ActionSupport implements SessionAware, S
 		}		
 		String doPrepare(){
 				String back = "";
+				logger.debug(" top action prepare ");
 				try{
 						user = (User)sessionMap.get("user");
 						if(url.equals("")){
@@ -79,7 +80,7 @@ public abstract class TopAction extends ActionSupport implements SessionAware, S
 								return super.execute();
 						}								
 				}catch(Exception ex){
-						System.out.println(ex);
+						logger.error(ex);
 				}		
 				return back;
 		}		

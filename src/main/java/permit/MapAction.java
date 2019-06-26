@@ -34,6 +34,7 @@ public class MapAction extends TopAction{
 						back = address.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(back);
 						}
 						else{
 								excavation_id = address.getExcavation_id();
@@ -43,7 +44,7 @@ public class MapAction extends TopAction{
 										res.sendRedirect(str);
 										return super.execute();
 								}catch(Exception ex){
-										System.err.println(ex);
+										logger.error(ex);
 								}				
 						}
 				}
@@ -90,6 +91,7 @@ public class MapAction extends TopAction{
 						String back = address.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(back);
 						}
 				}
 				return ret;
@@ -103,6 +105,9 @@ public class MapAction extends TopAction{
 						if(keys != null && keys.size() > 0){
 								key = keys.get(0);
 						}
+				}
+				else{
+						logger.debug(back);
 				}
 				return key;
 		}

@@ -146,24 +146,6 @@ public class ExpireScheduler{
 						// scheduler has been started)
 						//	sched.start();
 
-						/*
-							logger.info("------- Started Scheduler -----------------");
-			  
-							// wait long enough so that the scheduler as an opportunity to 
-							// run the job!
-							logger.info("------- Waiting 65 seconds... -------------");
-							try {
-							// wait 65 seconds to show job
-							Thread.sleep(65L * 1000L); 
-							// executing...
-							} catch (Exception e) {
-							}
-			  
-							// shut down the scheduler
-							logger.info("------- Shutting Down ---------------------");
-							sched.shutdown(true);
-							logger.info("------- Shutdown Complete -----------------");
-						*/
 				}catch(Exception ex){
 						logger.error(ex);
 						System.err.println(ex);

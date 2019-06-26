@@ -29,9 +29,11 @@ public class UserAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Save")){
 						ret = SUCCESS;
+						logger.debug(" user action save ");
 						back = rowUser.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" user action save "+back);
 						}
 						else{
 								id = rowUser.getId();
@@ -40,10 +42,12 @@ public class UserAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug(" user action update ");
 						back = rowUser.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" user action update "+back);
 						}
 						else{
 								addActionMessage("Updated Successfully");
@@ -93,6 +97,7 @@ public class UserAction extends TopAction{
 								users = ul.getUsers();
 						}
 						else{
+								logger.debug(" user action users "+back);
 								addActionError(back);
 						}
 				}
@@ -105,6 +110,7 @@ public class UserAction extends TopAction{
 						String back = rowUser.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" user action pop "+back);
 						}
 				}
 				return ret;

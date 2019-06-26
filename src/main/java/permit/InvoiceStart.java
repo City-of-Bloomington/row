@@ -86,9 +86,14 @@ public class InvoiceStart implements java.io.Serializable{
 						if(!company_id.equals("")){
 								CompanyContactList ccl = new CompanyContactList(company_id);
 								String back = ccl.find();
-								List<CompanyContact> list = ccl.getCompany_contacts();
-								if(back.equals("") && list.size() > 0){
-										companyContacts = list;
+								if(back.equals("")){								
+										List<CompanyContact> list = ccl.getCompany_contacts();
+										if(list.size() > 0){
+												companyContacts = list;
+										}
+								}
+								else{
+										logger.debug("invoice start "+back);
 								}
 						}
 						else if(!contact_id.equals("")){
@@ -114,13 +119,17 @@ public class InvoiceStart implements java.io.Serializable{
 												back = companyContact.doSave();
 												company_contact_id = companyContact.getId();
 										}
-								}				
+								}
+								else{
+										logger.debug("invoice start "+back);
+								}
 						}
 				}
 		}
 		//
 		public Contact getContact(){
 				getCompanyContact();
+				logger.debug("invoice start get cont");
 				if(companyContact != null){
 						contact = companyContact.getContact();
 				}
@@ -135,6 +144,7 @@ public class InvoiceStart implements java.io.Serializable{
 		}
 		public Company getCompany(){
 				getCompanyContact();
+				logger.debug("invoice start get comp");
 				if(companyContact != null){
 						company =  companyContact.getCompany();
 				}

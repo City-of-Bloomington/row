@@ -330,6 +330,7 @@ public class Contact{
 				return type_id.equals("3");
 		}
 		public List<Invoice> getInvoices(){
+				logger.debug(" contact invoices ");
 				if(!id.equals("")){
 						InvoiceList ccl = new InvoiceList(id);
 						ccl.setNoLimit();
@@ -340,10 +341,14 @@ public class Contact{
 										invoices = list;
 								}
 						}
+						else{
+								logger.debug(" contact invoices "+back);
+						}
 				}
 				return invoices;
 		}
 		public List<Permit> getPermits(){
+				logger.debug(" contact permits ");
 				if(!id.equals("")){
 						PermitList ccl = new PermitList();
 						ccl.setContact_id(id);
@@ -355,10 +360,14 @@ public class Contact{
 										permits = list;
 								}
 						}
+						else{
+								logger.error(" contact permits "+back);
+						}
 				}
 				return permits;
 		}
 		public List<Bond> getBonds(){
+				logger.debug(" contact bonds ");
 				if(!id.equals("")){
 						BondList ccl = new BondList();
 						ccl.setContact_id(id);
@@ -369,6 +378,9 @@ public class Contact{
 								if(list != null && list.size() > 0){
 										bonds = list;
 								}
+						}
+						else{
+								logger.debug(" contact bonds "+back);
 						}
 				}
 				return bonds;
@@ -420,7 +432,7 @@ public class Contact{
 		String doSave(){
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				//
 				String qq = "";
@@ -444,11 +456,11 @@ public class Contact{
 						pstmt = con.prepareStatement(qq);
 						msg = setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}
@@ -458,7 +470,7 @@ public class Contact{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				if(isPropertyOwner()){
 						CompanyContact cct = new CompanyContact(null, null, id);
@@ -484,13 +496,13 @@ public class Contact{
 						return doSave();
 				}
 				qq = "update contacts set fname=?,lname=?,title=?,type_id=?,address=?,city=?,state=?,zip=?,work_phone=?,cell_phone=?,fax=?,email=?,notes=? where id=? ";
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
 				try {
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to Database ";
-								logger.error(msg);
-								return msg;
-						}
 						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						msg = setFields(pstmt);
@@ -596,15 +608,15 @@ public class Contact{
 						" c.notes,t.name "+
 						" from contacts c "+
 						" left join contact_types t on c.type_id=t.id where c.id=?";
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				logger.debug(qq);			
+				
 				try {
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to Database ";
-								logger.error(msg);
-								return msg;
-						}
-
-						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1,id);
 						rs = pstmt.executeQuery();
@@ -650,14 +662,15 @@ public class Contact{
 						return msg;
 				}
 				qq = "delete from contacts where id=?";
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				logger.debug(qq);
+				
 				try {
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to Database ";
-								logger.error(msg);
-								return msg;
-						}
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						pstmt.executeUpdate();

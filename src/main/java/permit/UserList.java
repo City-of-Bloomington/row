@@ -36,14 +36,13 @@ public class UserList{
 				Statement stmt = null;
 				ResultSet rs = null;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-						}
-						else{
-								stmt = con.createStatement();
-						}
+						stmt = con.createStatement();
 						users = new ArrayList<>();
 						rs = stmt.executeQuery(qq);
 						while(rs.next()){

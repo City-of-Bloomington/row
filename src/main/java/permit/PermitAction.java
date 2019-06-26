@@ -34,10 +34,12 @@ public class PermitAction extends TopAction{
 				//
 				if(action.equals("Save")){
 						ret = SUCCESS;
+						logger.debug("permit action save ");
 						permit.setUser_id(user.getId());
 						back = permit.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("permit action save "+back);								
 						}
 						else{
 								id = permit.getId();
@@ -46,13 +48,16 @@ public class PermitAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug("permit action update ");
 						permit.setUser_id(user.getId());
 						back = permit.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("permit action update "+back);
 						}
 						else{
+								
 								addActionMessage("Updated Successfully");
 						}
 				}
@@ -72,6 +77,7 @@ public class PermitAction extends TopAction{
 
 		public Permit getPermit(){ 
 				if(permit == null){
+						logger.debug("permit action get permit ");
 						permit = new Permit();
 						if(!company_contact_id.equals("")){
 								permit.setCompany_contact_id(company_contact_id);
@@ -81,6 +87,7 @@ public class PermitAction extends TopAction{
 		}
 		//
 		public List<Bond> getBonds(){
+				logger.debug("permit action get bonds ");
 				if(!company_contact_id.equals("")){
 						BondList bl = new BondList();			
 						Company company = permit.getCompany();
@@ -100,15 +107,24 @@ public class PermitAction extends TopAction{
 								if(ones != null && ones.size() > 0)
 										bonds = ones;
 						}
+						else{
+								logger.debug("permit action get bonds "+back);
+						}
 				}
 				return bonds;
 		}
 
 		public List<User> getInspectors(){
+				logger.debug("permit action get inspectors ");
 				InspectorList bl = new InspectorList();
 				String back = bl.find();
-				if(back.equals("") && bl.getInspectors() != null){
-						inspectors = bl.getInspectors();
+				if(back.equals("")){
+						if(bl.getInspectors() != null){
+								inspectors = bl.getInspectors();
+						}
+				}
+				else{
+						logger.debug("permit action get inspectors "+back);
 				}
 				return inspectors;
 		}
@@ -148,6 +164,7 @@ public class PermitAction extends TopAction{
 						String back = permit.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("permit action pop "+back);
 						}
 				}
 				return ret;

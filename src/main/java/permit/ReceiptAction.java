@@ -29,10 +29,12 @@ public class ReceiptAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Save")){
 						ret = SUCCESS;
+						logger.debug(" receipt action save ");
 						receipt.setUser_id(user.getId());
 						back = receipt.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" receipt action save "+back);
 						}
 						else{
 								id = receipt.getId();
@@ -41,13 +43,15 @@ public class ReceiptAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug(" receipt action update ");
 						receipt.setUser_id(user.getId());
 						back = receipt.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
 						}
 						else{
+								logger.debug(" receipt action update "+back);
 								addActionMessage("Updated Successfully");
 						}
 				}
@@ -59,7 +63,7 @@ public class ReceiptAction extends TopAction{
 								res.sendRedirect(str);
 								return super.execute();
 						}catch(Exception ex){
-								System.err.println(ex);
+								logger.error(ex);
 						}
 				}			
 				else if(!id.equals("")){
@@ -110,6 +114,7 @@ public class ReceiptAction extends TopAction{
 						String back = receipt.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" receipt action pop "+back);
 						}
 				}
 				return ret;

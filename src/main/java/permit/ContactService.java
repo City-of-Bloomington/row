@@ -72,6 +72,7 @@ public class ContactService extends HttpServlet{
 								// System.err.println(name+" "+value);
 						}
 				}
+				logger.debug(" contact service ");	
 				ContactList cl = null;
 				List<Contact> list = null;
 				if(!name_str.equals("")){
@@ -83,8 +84,12 @@ public class ContactService extends HttpServlet{
 						if(back.equals("")){
 								list = cl.getContacts();
 						}
+						else{
+								logger.error(" contact service "+back);	
+						}
 				}
 				if(list != null && list.size() > 0){
+						logger.debug(" write json");	
 						String json = writeJson(list);
 						out.println(json);
 				}

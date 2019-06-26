@@ -259,14 +259,14 @@ public class PermitList {
 						qq += " order by "+sort_by;
 				}
 				qq += " "+limit;
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				logger.debug(qq);
 				try {
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to Database ";
-								logger.error(msg);
-								return msg;
-						}
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!id.equals("")){
@@ -415,14 +415,15 @@ public class PermitList {
 						qq += " order by "+sort_by;
 				}
 				qq += " "+limit;
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				logger.debug(qq);
+				
 				try {
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to Database ";
-								logger.error(msg);
-								return msg;
-						}
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!id.equals("")){

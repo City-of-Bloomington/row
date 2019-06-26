@@ -24,19 +24,24 @@ public class PermitSearchAction extends TopAction{
 		List<Permit> permits = null;
 		PermitList permitList = null;
 		List<User> inspectors = null;
+		String company_name="", contact_name="";
 		String permitsTitle = "Most Recent Permits";
+		
 		public String execute(){
 				String ret = SUCCESS;
 				String back = doPrepare();
 				//
 				if(!action.equals("")){
+						logger.debug(" permit search action ");
 						permitList.setNoLimit();
 						back = permitList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" permit search action "+back);
 						}
 						else{
 								// ret = "result";
+								logger.debug(" permit search action after back ");
 								permits = permitList.getPermits();
 								if(permits == null || permits.size() == 0){
 										permitsTitle = "No match found ";
@@ -86,6 +91,7 @@ public class PermitSearchAction extends TopAction{
 		}
 
 		public List<User> getInspectors(){
+				logger.debug(" get inspector list ");
 				InspectorList bl = new InspectorList();
 				String back = bl.find();
 				if(back.equals("") && bl.getInspectors() != null){
@@ -95,7 +101,6 @@ public class PermitSearchAction extends TopAction{
 
 		}	
 
-		String company_name="", contact_name="";
 		public void setCompany_name(String val){
 				if(val != null)
 						company_name = val;

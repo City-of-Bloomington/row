@@ -42,13 +42,13 @@ public class MailUserList{
 				qq += qo;
 				// System.err.println(qq);
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
 				try{
 						mailUsers = new ArrayList<MailUser>();
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-								return msg;
-						}
 						pstmt = con.prepareStatement(qq);
 						rs = pstmt.executeQuery();	
 						while(rs.next()){
@@ -73,35 +73,5 @@ public class MailUserList{
 				return msg;
 			
 		}
-		/*
-		String findNextFireTime(){
-				String msg = "";
-				Connection con = null;
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
-				//		
-				String qq = " select date_format(from_unixtime(next_fire_time/1000),'%W %m/%d/%Y %H:%i') from QRTZ_TRIGGERS"; // we will have only one record
-				logger.debug(qq);
-				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to DB";
-								return msg;
-						}
-						pstmt = con.prepareStatement(qq);
-						rs = pstmt.executeQuery();
-						if(rs.next()){ //  all what we need is one record
-								next_fire_time = rs.getString(1);
-						}
-				}catch(Exception ex){
-						msg += ex;
-				}
-				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
-				}
-				return msg;
-		
-		
-		}
-		*/	
+
 }

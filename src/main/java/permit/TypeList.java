@@ -41,20 +41,18 @@ public class TypeList{
 		public String find(){
 		
 				String msg="";
-		
 				String qq = "select id, name from "+table_name+" order by name ";
 				Connection con = null;
 				Statement stmt = null;
 				ResultSet rs = null;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}				
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-						}
-						else{
-								stmt = con.createStatement();
-						}
+						stmt = con.createStatement();
 						types = new ArrayList<Type>();
 						rs = stmt.executeQuery(qq);
 						while(rs.next()){

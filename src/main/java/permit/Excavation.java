@@ -165,6 +165,7 @@ public class Excavation implements java.io.Serializable{
 				return id;
 		}
 		public String getPermit_num(){
+				logger.debug("excav permit num ");				
 				if(permit_num.equals("") && !permit_id.equals("")){
 						getPermit();
 						if(permit != null){
@@ -221,6 +222,7 @@ public class Excavation implements java.io.Serializable{
 		}
 		public Permit getPermit(){
 				if(permit == null){
+						logger.debug("excav get permit ");
 						if(!permit_id.equals("")){
 								Permit one = new Permit(permit_id);
 								String back = one.doSelect();
@@ -238,6 +240,9 @@ public class Excavation implements java.io.Serializable{
 												permit = ones.get(0);
 										}
 								}
+								else{
+										logger.error("excav permit "+back);
+								}
 						}
 				}
 				return permit;
@@ -250,11 +255,15 @@ public class Excavation implements java.io.Serializable{
 		}
 		public Address getAddress(){
 				if(address == null){
+						logger.debug("excav get address ");
 						if(!address_id.equals("")){
 								Address one = new Address(address_id);
 								String back = one.doSelect();
 								if(back.equals("")){
 										address = one;
+								}
+								else{
+										logger.error("excav address "+back);
 								}
 						}
 						else{
@@ -264,6 +273,7 @@ public class Excavation implements java.io.Serializable{
 				return address;
 		}
 		public Type getUtility_type(){
+				logger.debug("excav util types ");
 				if(utility_type == null && !utility_type_id.equals("")){
 						Type one = new Type(utility_type_id, null, "utility_types");
 						String back = one.doSelect();
@@ -289,8 +299,8 @@ public class Excavation implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);							
 				try {
-						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, address_str);
 						rs = pstmt.executeQuery();
@@ -331,7 +341,7 @@ public class Excavation implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(cut_description.equals("")){
 						msg = "Cut description is required";
@@ -355,15 +365,16 @@ public class Excavation implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);							
 				try {
-						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -373,7 +384,7 @@ public class Excavation implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }
@@ -446,22 +457,22 @@ public class Excavation implements java.io.Serializable{
 						msg = "Could not connect to Database ";
 						logger.error(msg);
 						return msg;
-				}		
+				}
+				qq = "update excavcuts set ";
+				
+				qq += "cut_description = ?, ";
+				qq += "cut_type = ?,"; 
+				qq += "permit_num =?,"; 
+				qq += "address_id =?,";
+				qq += "depth = ?,";
+				qq += "width = ?,";		
+				qq += "length = ?,"; 
+				qq += "status = ?,"; 
+				qq += "utility_type_id = ? ";
+				qq += " where id = ? ";
+				logger.debug(qq);
 				try {
 						//
-						qq = "update excavcuts set ";
-			
-						qq += "cut_description = ?, ";
-						qq += "cut_type = ?,"; 
-						qq += "permit_num =?,"; 
-						qq += "address_id =?,";
-						qq += "depth = ?,";
-						qq += "width = ?,";		
-						qq += "length = ?,"; 
-						qq += "status = ?,"; 
-						qq += "utility_type_id = ? ";
-						qq += " where id = ? ";
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						setFields(pstmt);
 						pstmt.setString(10, id);
@@ -493,26 +504,26 @@ public class Excavation implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				qq = "select c.id, " +                         // 1
+						"c.cut_description, " +
+						"c.cut_type, " +
+						"c.permit_num, " +
+						"c.address_id, " +
+						"c.depth,"+     				
+						"c.width, " +
+						"c.length, " + 
+						"c.status, " + //				
+						"c.utility_type_id, " +
+						"u.name, "+
+						" a.address, "+
+						" a.loc_lat, "+
+						" a.loc_long "+
+						" from excavcuts c "+
+						" left join utility_types u on c.utility_type_id=u.id "+
+						" left join addresses a on a.id=c.address_id "+
+						" where c.id=?";
+				logger.debug(qq);
 				try {
-						qq = "select c.id, " +                         // 1
-								"c.cut_description, " +
-								"c.cut_type, " +
-								"c.permit_num, " +
-								"c.address_id, " +
-								"c.depth,"+     				
-								"c.width, " +
-								"c.length, " + 
-								"c.status, " + //				
-								"c.utility_type_id, " +
-								"u.name, "+
-								" a.address, "+
-								" a.loc_lat, "+
-								" a.loc_long "+
-								" from excavcuts c "+
-								" left join utility_types u on c.utility_type_id=u.id "+
-								" left join addresses a on a.id=c.address_id "+
-								" where c.id=?";
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						rs = pstmt.executeQuery();
@@ -567,8 +578,8 @@ public class Excavation implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);				
 				try {
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						pstmt.executeUpdate();

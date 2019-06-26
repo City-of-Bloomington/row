@@ -30,10 +30,12 @@ public class CompanySearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(!action.equals("")){
+						logger.debug(" comp search ");	
 						companyList.setNo_limit();
 						back = companyList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" comp search "+back);
 						}
 						else{
 								companies = companyList.getCompanies();
@@ -64,6 +66,7 @@ public class CompanySearchAction extends TopAction{
 								companies = bl.getCompanies();
 						}
 						else{
+								logger.error(" comp search "+back);
 								addActionError(back);
 						}
 				}

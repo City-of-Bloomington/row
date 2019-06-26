@@ -30,10 +30,12 @@ public class InvoiceSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(!action.equals("")){
+						logger.debug(" invoice search action ");
 						invoiceList.setNoLimit();
 						back = invoiceList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" invoice search action "+back);
 						}
 						else{
 								invoices = invoiceList.getInvoices();
@@ -49,7 +51,7 @@ public class InvoiceSearchAction extends TopAction{
 												res.sendRedirect(str);
 												return super.execute();
 										}catch(Exception ex){
-												System.err.println(ex);
+												logger.error(ex);
 										}						
 								}
 								else{
@@ -60,10 +62,13 @@ public class InvoiceSearchAction extends TopAction{
 				else{
 						InvoiceList bl = new InvoiceList();
 						back = bl.find();
-						if(back.equals("") && bl.getInvoices() != null){
-								invoices = bl.getInvoices();
+						if(back.equals("")){
+								if(bl.getInvoices() != null){
+										invoices = bl.getInvoices();
+								}
 						}
 						else{
+								logger.error(back);								
 								addActionError(back);
 						}
 				}

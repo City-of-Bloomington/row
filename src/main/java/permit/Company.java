@@ -166,6 +166,7 @@ public class Company implements java.io.Serializable{
 		}
 		//
 		public List<CompanyContact> getCompany_contacts(){
+				logger.debug("company contacts ");
 				if(!id.equals("")){
 						CompanyContactList ccl = new CompanyContactList(id);
 						String back = ccl.find();
@@ -175,11 +176,15 @@ public class Company implements java.io.Serializable{
 										company_contacts = list;
 								}
 						}
+						else{
+								logger.error(" company "+back);
+						}
 				}
 				return company_contacts;
 		}
 	
 		public List<Contact> getContacts(){
+				logger.debug(" company contact ");
 				if(!id.equals("")){
 						if(contacts == null){
 								getCompany_contacts();
@@ -197,6 +202,7 @@ public class Company implements java.io.Serializable{
 				return contacts;
 		}
 		public List<Invoice> getInvoices(){
+				logger.debug(" company invoices ");				
 				if(!id.equals("")){
 						InvoiceList ccl = new InvoiceList(null, id);
 						ccl.setNoLimit();
@@ -207,10 +213,14 @@ public class Company implements java.io.Serializable{
 										invoices = list;
 								}
 						}
+						else{
+								logger.error(" company invoices "+back);
+						}
 				}
 				return invoices;
 		}
 		public List<Permit> getPermits(){
+				logger.debug(" company permits ");
 				if(!id.equals("")){
 						PermitList ccl = new PermitList();
 						ccl.setCompany_id(id);
@@ -222,10 +232,14 @@ public class Company implements java.io.Serializable{
 										permits = list;
 								}
 						}
+						else{
+								logger.error(" company permits");
+						}
 				}
 				return permits;
 		}
 		public List<Bond> getBonds(){
+				logger.debug(" company bonds ");
 				if(!id.equals("")){
 						BondList ccl = new BondList();
 						ccl.setCompany_id(id);
@@ -238,10 +252,14 @@ public class Company implements java.io.Serializable{
 										bond = bonds.get(0);
 								}
 						}
+						else{
+								logger.error(" company "+back);
+						}
 				}
 				return bonds;
 		}
 		public List<Insurance> getInsurances(){
+				logger.debug(" company insurances ");
 				if(!id.equals("")){
 						InsuranceList ccl = new InsuranceList();
 						ccl.setCompany_id(id);
@@ -254,6 +272,9 @@ public class Company implements java.io.Serializable{
 										insurance = insurances.get(0);
 								}
 								
+						}
+						else{
+								logger.error(" company "+back);
 						}
 				}
 				return insurances;
@@ -294,7 +315,6 @@ public class Company implements java.io.Serializable{
 				return insurance;
 		}
 		public boolean isFlagged(){
-				System.err.println("testing flagged ");
 				boolean ret = false;
 				if(hasInsurances()){
 						if(insurance.isExpired()){
@@ -383,7 +403,7 @@ public class Company implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(name.equals("")){
 						msg = "Company name is required";
@@ -402,10 +422,11 @@ public class Company implements java.io.Serializable{
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -415,7 +436,7 @@ public class Company implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }	

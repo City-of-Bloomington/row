@@ -29,12 +29,14 @@ public class RescheduleAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Process")){
 						ret = SUCCESS;
+						logger.debug(" reschedule action ");
 						reschedule.setUrl(url);
 						if(activeMail)
 								reschedule.setActiveMail();
 						back = reschedule.doProcess();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" reschedule action "+back);
 						}
 						else{
 								addActionMessage("Saved Successfully");

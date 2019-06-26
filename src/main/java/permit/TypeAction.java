@@ -31,6 +31,7 @@ public class TypeAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Save")){
 						ret = SUCCESS;
+						logger.debug(" type action ");
 						type.setUser_id(user.getId());
 						if(!table_name.equals("")){
 								type.setTable_name(table_name);
@@ -38,6 +39,7 @@ public class TypeAction extends TopAction{
 						back = type.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" type action "+back);
 						}
 						else{
 								id = type.getId();
@@ -54,6 +56,7 @@ public class TypeAction extends TopAction{
 						back = type.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" type action update "+back);
 						}
 						else{
 								addActionMessage("Updated Successfully");
@@ -75,6 +78,7 @@ public class TypeAction extends TopAction{
 						back = type.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" type action "+back);
 						}
 						else{
 								id = type.getId();
@@ -82,7 +86,7 @@ public class TypeAction extends TopAction{
 						}						
 				}
 				else if(!id.equals("")){
-						System.err.println(" calling populate");
+						logger.debug(" calling populate");
 						ret = populate();
 				}
 				//
@@ -109,8 +113,13 @@ public class TypeAction extends TopAction{
 						bl.setTable_name(table_name);
 				}
 				String back = bl.find();
-				if(back.equals("") && bl.getTypes() != null){
-						types = bl.getTypes();
+				if(back.equals("")){
+						if(bl.getTypes() != null){
+								types = bl.getTypes();
+						}
+				}
+				else{
+						logger.debug(" types "+back);
 				}
 				return types;
 		}
@@ -163,6 +172,7 @@ public class TypeAction extends TopAction{
 				String back = type.doSelect();
 				if(!back.equals("")){
 						addActionError(back);
+						logger.debug(" type action pop "+back);
 				}
 				return ret;
 		}

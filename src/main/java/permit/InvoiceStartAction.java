@@ -31,10 +31,12 @@ public class InvoiceStartAction extends TopAction{
 
 				if(action.equals("Next")){
 						ret = SUCCESS;
+						logger.debug("invoice start action ");
 						start.setUser_id(user.getId());
 						back = start.doNext();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("invoice start action "+back);
 						}
 						else{
 								if(!start.getNeedMore()){
@@ -45,7 +47,7 @@ public class InvoiceStartAction extends TopAction{
 												res.sendRedirect(str);
 												return super.execute();
 										}catch(Exception ex){
-												System.err.println(ex);
+												logger.error(ex);
 										}
 								}
 						}
@@ -95,8 +97,13 @@ public class InvoiceStartAction extends TopAction{
 		public List<Invoice> getInvoices(){
 				InvoiceList bl = new InvoiceList();
 				String back = bl.find();
-				if(back.equals("") && bl.getInvoices() != null){
-						invoices = bl.getInvoices();
+				if(back.equals("")){
+						if(bl.getInvoices() != null){
+								invoices = bl.getInvoices();
+						}
+				}
+				else{
+						logger.debug("invoice start invoices "+back);
 				}
 				return invoices;
 		}

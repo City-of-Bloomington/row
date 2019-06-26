@@ -20,6 +20,7 @@ public class WelcomeAction extends TopAction{
     @Override
 		public String execute(){
 				String ret = SUCCESS;
+				logger.debug(" welcome action ");
 				doPrepare();
 				return ret;
 		}

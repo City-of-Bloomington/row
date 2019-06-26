@@ -30,10 +30,12 @@ public class InsuranceAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Save")){
 						ret = SUCCESS;
+						logger.debug("insurance action save ");		
 						insurance.setUser_id(user.getId());
 						back = insurance.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("insurance action "+back);		
 						}
 						else{
 								id = insurance.getId();
@@ -53,13 +55,15 @@ public class InsuranceAction extends TopAction{
 												shed.run();
 										}catch(Exception ex){
 												back += ex;
+												logger.debug("insurance action "+back);		
 										}
 
 								}								
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug("insurance action update ");		
 						insurance.setUser_id(user.getId());
 						back = insurance.doUpdate();
 						if(!back.equals("")){
@@ -82,6 +86,7 @@ public class InsuranceAction extends TopAction{
 												shed.run();
 										}catch(Exception ex){
 												back += ex;
+												logger.debug("insurance action "+back);		
 										}
 								}								
 						}
@@ -115,6 +120,9 @@ public class InsuranceAction extends TopAction{
 						String back = tl.find();
 						if(back.equals("")){
 								insurance_companies = tl.getTypes();
+						}
+						else{
+								logger.debug("insurance companies "+back);		
 						}
 				}
 				return insurance_companies;
@@ -152,6 +160,7 @@ public class InsuranceAction extends TopAction{
 						String back = insurance.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("insurance action pop "+back);		
 						}
 				}
 				return ret;

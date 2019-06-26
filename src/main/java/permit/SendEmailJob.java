@@ -35,6 +35,7 @@ public class SendEmailJob implements Job{
 		//
 		// will send emails
 		public SendEmailJob(){
+				logger.debug(" send email job ");
 
 		}
 		public void execute(JobExecutionContext context)

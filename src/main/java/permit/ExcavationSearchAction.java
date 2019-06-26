@@ -33,13 +33,14 @@ public class ExcavationSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(action.startsWith("Show")){
+						logger.debug(" excav search show");
 						getExcavList();
 						excavList.setNoLimit();
 						excavList.ensureAddress();
 						back = excavList.find();
 						if(!back.equals("")){
-								System.err.println(" error "+back);
 								addActionError(back);
+								logger.debug(" excav search "+back);
 						}
 						else{
 								List<Excavation> list = excavList.getExcavations();
@@ -64,11 +65,13 @@ public class ExcavationSearchAction extends TopAction{
 						}
 				}
 				else if(!action.equals("")){
+						logger.debug(" excav search ");
 						getExcavList();
 						excavList.setNoLimit();
 						back = excavList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" excav search "+back);
 						}
 						else{
 								
@@ -130,7 +133,7 @@ public class ExcavationSearchAction extends TopAction{
 		// to draw the map around it
 		//
 		public Address getPoint(){
-				System.out.println(" address called ");
+				logger.debug(" get point ");
 				if(midPoint == null){
 						double lat=0, lng=0;
 						int size = 1;
@@ -148,7 +151,7 @@ public class ExcavationSearchAction extends TopAction{
 						Address addr = new Address(" ", " ",""+lat,""+lng);
 						midPoint = addr;
 				}
-				System.out.println(" point "+midPoint);
+				logger.debug(" point "+midPoint);
 				return midPoint;
 		}
 		public String getExcavationsTitle(){
@@ -156,15 +159,20 @@ public class ExcavationSearchAction extends TopAction{
 		}
 
 		public List<Type> getUtility_types(){
+				logger.debug(" util types ");
 				TypeList bl = new TypeList("utility_types");
 				String back = bl.find();
 				if(back.equals("") && bl.getTypes() != null){
 						utility_types = bl.getTypes();
 				}
+				else{
+						logger.debug(" util types "+back);
+				}
 				return utility_types;
 
 		}
 		public ApiKey getKey(){
+				logger.debug(" get key ");
 				ApiKeyList akl = new ApiKeyList();
 				akl.setActiveOnly();
 				String back = akl.find();

@@ -141,6 +141,7 @@ public class PermitPdf extends HttpServlet {
 				String spacer = "   ";
 				//
 				PdfPTable headTable = null;
+				logger.debug("permit pdf header ");
 				try{
 						//
 						// for http url use
@@ -225,6 +226,7 @@ public class PermitPdf extends HttpServlet {
 		//
     void writePage(HttpServletResponse res,
 									 Permit permit){
+				logger.debug("permit pdf pages ");
 				//
 				// paper size legal (A4) 8.5 x 11
 				// page 1-inch = 72 points

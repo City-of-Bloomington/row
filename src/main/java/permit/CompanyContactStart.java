@@ -69,11 +69,15 @@ public class CompanyContactStart implements java.io.Serializable{
 		}
 		//
 		public CompanyContact getCompanyContact(){
+				logger.debug(" company contact start ");
 				if(companyContact == null && !company_contact_id.equals("")){
 						CompanyContact one = new CompanyContact(company_contact_id);
 						String back = one.doSelect();
 						if(back.equals("")){
 								companyContact = one;
+						}
+						else{
+								logger.error(" company contact start "+back);
 						}
 				}
 				return companyContact;
@@ -82,6 +86,7 @@ public class CompanyContactStart implements java.io.Serializable{
 				return companyContacts;
 		}
 		public void findCompanyContacts(){
+				logger.debug(" company contact find ");
 				if(companyContacts == null){
 						if(!company_id.equals("")){
 								CompanyContactList ccl = new CompanyContactList(company_id);
@@ -90,13 +95,16 @@ public class CompanyContactStart implements java.io.Serializable{
 								if(back.equals("") && list.size() > 0){
 										companyContacts = list;
 								}
+								else{
+										logger.debug(" company contact find "+back);
+								}
 						}
 						else if(!contact_id.equals("")){
 								CompanyContactList ccl = new CompanyContactList(null, contact_id);
 								String back = ccl.find();
+								logger.debug(" back "+back);								
 								List<CompanyContact> list = ccl.getCompany_contacts();
-								System.err.println(" back "+back);
-								System.err.println(" size "+list.size());
+								logger.debug(" size "+list.size());
 								if(back.equals("")){
 										if(list.size() > 0){
 												companyContacts = list;
@@ -113,12 +121,16 @@ public class CompanyContactStart implements java.io.Serializable{
 												back = companyContact.doSave();
 												company_contact_id = companyContact.getId();
 										}
-								}				
+								}
+								else{
+										logger.error(" comp cont start "+back);			
+								}
 						}
 				}
 		}
 		//
 		public Contact getContact(){
+				logger.debug(" get contact ");	
 				getCompanyContact();
 				if(companyContact != null){
 						contact = companyContact.getContact();
@@ -129,10 +141,14 @@ public class CompanyContactStart implements java.io.Serializable{
 						if(back.equals("")){
 								contact = one;
 						}
+						else{
+								logger.error(" get contact "+back);	
+						}
 				}
 				return contact;
 		}
 		public Company getCompany(){
+				logger.debug(" get comp ");	
 				getCompanyContact();
 				if(companyContact != null){
 						company =  companyContact.getCompany();
@@ -142,6 +158,9 @@ public class CompanyContactStart implements java.io.Serializable{
 						String back = one.doSelect();
 						if(back.equals("")){
 								company = one;
+						}
+						else{
+								logger.error(" get comp "+back);	
 						}
 				}
 				return company;
@@ -161,6 +180,7 @@ public class CompanyContactStart implements java.io.Serializable{
 		}	
 		String doNext(){
 				String msg = "";
+				logger.debug(" do next ");	
 				if(!company_contact_id.equals("")){
 						needMore = false;
 				}

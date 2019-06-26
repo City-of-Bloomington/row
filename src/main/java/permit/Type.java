@@ -182,9 +182,9 @@ public class Type{
 						logger.error(msg);
 						return msg;
 				}
+				qq = "select name from "+table_name+" where id=? "; 
+				logger.debug(qq);
 				try {
-						qq = "select name from "+table_name+" where id=? "; 
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						rs = pstmt.executeQuery();
@@ -203,7 +203,6 @@ public class Type{
 				finally{
 						Helper.databaseDisconnect(con, pstmt, rs);
 				}
-
 				return msg;
 
 		}	

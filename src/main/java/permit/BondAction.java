@@ -29,11 +29,13 @@ public class BondAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				if(action.equals("Save")){
+						logger.debug(" bond action save ");	
 						ret = SUCCESS;
 						bond.setUser_id(user.getId());
 						back = bond.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" bond action "+back);	
 						}
 						else{
 								id = bond.getId();
@@ -63,11 +65,13 @@ public class BondAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
+						logger.debug(" bond action update ");	
 						ret = SUCCESS;			
 						bond.setUser_id(user.getId());
 						back = bond.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" bond action "+back);	
 						}
 						else{
 								addActionMessage("Updated Successfully");
@@ -116,16 +120,21 @@ public class BondAction extends TopAction{
 		}
 		//
 		public List<Type> getBond_companies(){
+				logger.debug(" get bond companies ");	
 				if(bond_companies == null){
 						TypeList tl = new TypeList("bond_companies");
 						String back = tl.find();
 						if(back.equals("")){
 								bond_companies = tl.getTypes();
 						}
+						else{
+								logger.error(" bond action "+back);	
+						}
 				}
 				return bond_companies;
 		}
 		public List<Type> getBond_types(){
+				logger.debug(" get bond types ");	
 				if(bond_types == null){
 						TypeList tl = new TypeList("bond_types");
 						String back = tl.find();
@@ -168,6 +177,7 @@ public class BondAction extends TopAction{
 						String back = bond.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" bond action "+back);	
 						}
 				}
 				return ret;

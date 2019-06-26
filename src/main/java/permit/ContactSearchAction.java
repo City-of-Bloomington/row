@@ -32,10 +32,13 @@ public class ContactSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(!action.equals("")){
+						logger.debug(" contact search");						
+
 						contactList.setNo_limit();
 						back = contactList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" contact search "+back);	
 						}
 						else{
 								// ret = "result";
@@ -65,6 +68,7 @@ public class ContactSearchAction extends TopAction{
 						back = bl.find();
 						if(back.equals("") && bl.getContacts() != null){
 								contacts = bl.getContacts();
+								logger.debug(" contact search "+back);	
 						}
 						else{
 								addActionError(back);
@@ -87,10 +91,14 @@ public class ContactSearchAction extends TopAction{
 		}
 
 		public List<Type> getTypes(){
+				logger.debug(" contact types ");	
 				TypeList bl = new TypeList("contact_types");
 				String back = bl.find();
 				if(back.equals("") && bl.getTypes() != null){
 						types = bl.getTypes();
+				}
+				else{
+						logger.error(" contact types "+back);	
 				}
 				return types;
 		}

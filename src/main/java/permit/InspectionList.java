@@ -158,12 +158,12 @@ public class InspectionList{
 						qq += " limit "+limit;
 				}
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}				
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-								return msg;
-						}
 						pstmt = con.prepareStatement(qq);
 						int jj = 1;
 						if(!id.equals("")){

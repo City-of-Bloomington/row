@@ -32,10 +32,13 @@ public class InspectionSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(!action.equals("")){
+						logger.debug("insp search action ");						
+
 						inspectionList.setNoLimit();
 						back = inspectionList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("insp search action "+back);		
 						}
 						else{
 								inspections = inspectionList.getInspections();
@@ -66,6 +69,7 @@ public class InspectionSearchAction extends TopAction{
 								inspections = bl.getInspections();
 						}
 						else{
+								logger.debug("insp search "+back);		
 								addActionError(back);				
 						}
 				}
@@ -85,10 +89,16 @@ public class InspectionSearchAction extends TopAction{
 				return inspectionsTitle;
 		}
 		public List<User> getInspectors(){
+				logger.debug("insp search inspectors ");		
 				InspectorList bl = new InspectorList();
 				String back = bl.find();
-				if(back.equals("") && bl.getInspectors() != null){
-						inspectors = bl.getInspectors();
+				if(back.equals("")){
+						if(bl.getInspectors() != null){
+								inspectors = bl.getInspectors();
+						}
+				}
+				else{
+						logger.debug("insp search inspectors "+back);		
 				}
 				return inspectors;
 

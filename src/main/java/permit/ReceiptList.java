@@ -163,9 +163,9 @@ public class ReceiptList{
 				if(con == null){
 						msg = "Could not connect ";
 						return msg;
-				}		
+				}
+				logger.debug(qq);				
 				try{
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!id.equals("")){

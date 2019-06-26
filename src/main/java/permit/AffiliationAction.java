@@ -29,6 +29,7 @@ public class AffiliationAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				if(action.equals("Save")){
+						logger.debug(" affil action save ");	
 						ret = SUCCESS;
 						companyContact.setUser_id(user.getId());
 						back = companyContact.doSave();
@@ -44,6 +45,7 @@ public class AffiliationAction extends TopAction{
 						}
 				}
 				if(action.startsWith("Remove")){
+						logger.debug(" affil action remove ");	
 						ret = SUCCESS;
 						companyContact.setUser_id(user.getId());
 						company_id = companyContact.getCompany_id();
@@ -51,8 +53,10 @@ public class AffiliationAction extends TopAction{
 						back = companyContact.doDelete();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" affil action "+back);	
 						}
 						else{
+								
 								addActionMessage("Affiliation Removed Successfully");
 						}
 				}		
@@ -65,7 +69,8 @@ public class AffiliationAction extends TopAction{
 				return ret;
 		}
 
-		public CompanyContact getCompanyContact(){ 
+		public CompanyContact getCompanyContact(){
+				logger.debug(" get comp contact ");	
 				if(companyContact == null){
 						companyContact = new CompanyContact();
 						if(!contact_id.equals("")){
@@ -129,6 +134,7 @@ public class AffiliationAction extends TopAction{
 						String back = companyContact.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" affil action "+back);	
 						}
 				}
 				return ret;

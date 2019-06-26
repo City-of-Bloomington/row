@@ -271,40 +271,53 @@ public class Permit implements java.io.Serializable{
 				return !bond_id.equals("");
 		}
 		public Insurance getInsurance(){
+				logger.debug(" get insurances ");
 				if(insurance == null && !insurance_id.equals("")){
 						Insurance one = new Insurance(insurance_id);
 						String back = one.doSelect();
 						if(back.equals("")){
 								insurance = one;
 						}
+						else{
+								logger.error(" get insurances "+back);
+						}
 				}
 				return insurance;
 		}		
 		public Invoice getInvoice(){
 				if(invoice == null && !invoice_id.equals("")){
+						logger.debug(" get invoices ");
 						Invoice one = new Invoice(invoice_id);
 						String back = one.doSelect();
 						if(back.equals("")){
 								invoice = one;
 						}
+						else{
+								logger.error(" get insurances "+back);
+						}
 				}
 				return invoice;
 		}	
 		public CompanyContact getCompanyContact(){
+				logger.debug(" get company contact ");
 				if(companyContact == null && !company_contact_id.equals("")){
 						CompanyContact one = new CompanyContact(company_contact_id);
+						logger.debug(" get company contact before select ");
 						String back = one.doSelect();
 						if(back.equals("")){
 								companyContact = one;
 								company = one.getCompany();
 								contact = one.getContact();
 						}
+						else{
+								logger.error(" get company contact "+back);
+						}
 				}
 				return companyContact;
 		}
 		public List<Invoice> getInvoices(){
-				// if(invoice_id.equals("")){
-						
+
+				logger.debug(" get invoices ");
 				InvoiceList  ill = new InvoiceList();
 				getCompany();
 				if(company != null){
@@ -317,6 +330,7 @@ public class Permit implements java.io.Serializable{
 						}
 				}
 				ill.setUnpaidStatus();
+				logger.debug(" get invoices before find");
 				String back = ill.find();
 				if(back.equals("")){
 						List<Invoice> ones = ill.getInvoices();
@@ -324,10 +338,14 @@ public class Permit implements java.io.Serializable{
 								invoices = ones;
 						}
 				}
+				else{
+						logger.error(" get invoices "+back);
+				}
 				return invoices;
 		}
 		public List<Bond> getBondsForSelection(){
 				if(bond_id.equals("")){
+						logger.debug(" get bonds");
 						
 						BondList  ill = new BondList();
 						getCompany();
@@ -341,6 +359,7 @@ public class Permit implements java.io.Serializable{
 								}
 						}
 						ill.setActiveOnly();
+						logger.debug(" get bonds before find ");
 						String back = ill.find();
 						if(back.equals("")){
 								List<Bond> ones = ill.getBonds();
@@ -348,30 +367,39 @@ public class Permit implements java.io.Serializable{
 										bonds = ones;
 								}
 						}
+						else{
+								logger.error(" get bonds "+back);
+						}
 				}
 				return bonds;
 		}
 		public List<Insurance> getInsurancesForSelection(){
 				if(insurance_id.equals("")){
-						
+						logger.debug(" get insurance ");						
 						InsuranceList  ill = new InsuranceList();
+						logger.debug(" get insurance before company");		
 						getCompany();
 						if(company != null){
 								ill.setCompany_id(company.getId());
 						}
 						else{
+								logger.debug(" get insurance before contact");		
 								getContact();
 								if(contact != null){
 										ill.setContact_id(contact.getId());
 								}
 						}
 						ill.setActiveOnly();
+						logger.debug(" get insurance before find ");		
 						String back = ill.find();
 						if(back.equals("")){
 								List<Insurance> ones = ill.getInsurances();
 								if(ones != null && ones.size() > 0){
 										insurances = ones;
 								}
+						}
+						else{
+								logger.error(" get insurance "+back);	
 						}
 				}
 				return insurances;
@@ -393,17 +421,20 @@ public class Permit implements java.io.Serializable{
 				return insurances != null && insurances.size() > 0;
 		}		
 		public Contact getContact(){
+				logger.debug(" get contact ");	
 				if(contact == null) 
 						getCompanyContact();
 				return contact;
 		}
 		public Company getCompany(){
+				logger.debug(" get company ");	
 				if(company == null)
 						getCompanyContact();
 				return company;
 		}	
 
 		public User getReviewer(){
+				logger.debug(" get reviewer ");	
 				if(reviewer == null && !reviewer_id.equals("")){
 						User one = new User(reviewer_id);
 						String back = one.doSelect();
@@ -418,6 +449,7 @@ public class Permit implements java.io.Serializable{
 		 * we want to List all bonds in jsp
 		 */
 		public List<Bond> getBonds(){
+				logger.debug(" get bonds ");	
 				List<Bond> bonds = null;
 				if(hasBond()){
 						getBond();
@@ -433,6 +465,7 @@ public class Permit implements java.io.Serializable{
 		 * we want to List all insurances in jsp
 		 */
 		public List<Insurance> getInsurances(){
+				logger.debug(" get insurances ");	
 				List<Insurance> insurances = null;
 				if(hasInsurance()){
 						getInsurance();
@@ -462,6 +495,7 @@ public class Permit implements java.io.Serializable{
 				return companyContact != null;
 		}
 		public List<Excavation> getExcavations(){
+				logger.debug(" get excavs ");	
 				if(excavations == null && !permit_num.equals("")){
 						ExcavationList el = new ExcavationList();
 						el.setPermit_num(permit_num);
@@ -474,6 +508,7 @@ public class Permit implements java.io.Serializable{
 		}
 		
 		public List<Inspection> getInspections(){
+				logger.debug(" get inspections ");	
 				if(inspections == null && !permit_num.equals("")){
 						InspectionList el = new InspectionList();
 						el.setPermit_num(permit_num);
@@ -485,6 +520,7 @@ public class Permit implements java.io.Serializable{
 				return inspections;
 		}
 		public Excavation getLastExcavation(){
+				logger.debug(" get last excav ");	
 				getExcavations();
 				if(excavations != null && excavations.size() > 0){
 						return excavations.get(0);
@@ -522,7 +558,7 @@ public class Permit implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(reviewer_id.equals("") && !user_id.equals("")){
 						reviewer_id = user_id;
@@ -542,10 +578,11 @@ public class Permit implements java.io.Serializable{
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -555,7 +592,7 @@ public class Permit implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }

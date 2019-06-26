@@ -33,10 +33,12 @@ public class BondSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(!action.equals("")){
+						logger.debug(" bond search ");	
 						bondList.setNoLimit();
 						back = bondList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" bond search "+back);
 						}
 						else{
 								// ret = "result";
@@ -96,6 +98,7 @@ public class BondSearchAction extends TopAction{
 				return types;
 		}
 		public List<Type> getBond_companies(){
+				logger.debug(" bond search bond types ");
 				TypeList bl = new TypeList("bond_companies");
 				String back = bl.find();
 				if(back.equals("") && bl.getTypes() != null){

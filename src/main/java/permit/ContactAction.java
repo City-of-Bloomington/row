@@ -30,11 +30,14 @@ public class ContactAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				if(action.equals("Save")){
+						logger.debug(" contact action save ");
+
 						ret = SUCCESS;
 						contact.setUser_id(user.getId());
 						back = contact.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" contact action save "+back);
 						}
 						else{
 								id = contact.getId();
@@ -45,11 +48,13 @@ public class ContactAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug(" contact action update ");
 						contact.setUser_id(user.getId());
 						back = contact.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" contact action update "+back);
 						}
 						else{
 								addActionMessage("Updated Successfully");
@@ -69,6 +74,7 @@ public class ContactAction extends TopAction{
 						back = cc.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" contact action "+back);
 						}
 				}
 				return ret;
@@ -82,14 +88,19 @@ public class ContactAction extends TopAction{
 		}
 		//
 		public List<Contact> getContacts(){
+				logger.debug(" contacts ");
 				ContactList bl = new ContactList();
 				String back = bl.find();
 				if(back.equals("") && bl.getContacts() != null){
 						contacts = bl.getContacts();
 				}
+				else{
+						logger.error(" contacts "+back);
+				}
 				return contacts;
 		}
 		public List<Type> getTypes(){
+				logger.debug(" contact types");
 				TypeList bl = new TypeList("contact_types");
 				String back = bl.find();
 				if(back.equals("") && bl.getTypes() != null){
@@ -140,6 +151,7 @@ public class ContactAction extends TopAction{
 						String back = contact.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" contact pop "+back);
 						}
 				}
 				return ret;

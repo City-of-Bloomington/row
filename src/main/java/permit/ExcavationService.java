@@ -82,7 +82,7 @@ public class ExcavationService extends HttpServlet{
 								// System.err.println(name+" "+value);
 						}
 				}
-		
+				logger.debug(" excav service ");
 				List<Excavation> list = null;
 				if(el.hasCoords()){
 						el.setNoLimit();
@@ -92,6 +92,7 @@ public class ExcavationService extends HttpServlet{
 						}
 				}
 				if(list != null && list.size() > 0){
+						logger.debug(" excav service json ");
 						String json = writeJson(list);
 						out.println(json);
 				}

@@ -399,7 +399,7 @@ public class Insurance implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2 = null;
 				ResultSet rs = null;
 				if(hasPermit() && company_contact_id.equals("")){
 						findCompanyContactFromPermit();
@@ -417,12 +417,11 @@ public class Insurance implements java.io.Serializable{
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
-
 						logger.debug(qq);
-
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -432,7 +431,7 @@ public class Insurance implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				if(msg.equals(""))
 						msg = doSelect();

@@ -40,12 +40,14 @@ public class ExcavationAction extends TopAction{
 						}
 				}
 				if(action.equals("Save")){
+						logger.debug(" excav action save ");
 						ret = SUCCESS;
 						excavation.setUser_id(user.getId());
 						back = excavation.handleAddress(checkAddrUrl);
 						back = excavation.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" excav action save "+back);
 						}
 						else{
 								id = excavation.getId();
@@ -54,22 +56,26 @@ public class ExcavationAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug(" excav action update ");
 						excavation.setUser_id(user.getId());
 						back = excavation.handleAddress(checkAddrUrl);
 						back = excavation.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" excav action save "+back);
 						}
 						else{
 								addActionMessage("Updated Successfully");
 						}
 				}
 				else if(action.equals("Delete") && user.isAdmin()){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug(" excav action delete ");
 						back = excavation.doDelete();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" excav action delete "+back);
 						}
 						else{
 								addActionMessage("Deleted Successfully");
@@ -87,7 +93,8 @@ public class ExcavationAction extends TopAction{
 		 * this method is used to get user and debug param
 		 */
 
-		public Excavation getExcavation(){ 
+		public Excavation getExcavation(){
+				logger.debug(" excavs ");
 				if(excavation == null){
 						excavation = new Excavation();
 						if(!permit_id.equals("")){
@@ -97,11 +104,15 @@ public class ExcavationAction extends TopAction{
 				return excavation;
 		}
 		public List<Type> getUtility_types(){
+				logger.debug(" excav util types ");
 				if(utility_types == null){
 						TypeList tl = new TypeList("utility_types");
 						String back = tl.find();
 						if(back.equals("")){
 								utility_types = tl.getTypes();
+						}
+						else{
+								logger.debug(" excav util types "+back);
 						}
 				}
 				return utility_types;
@@ -135,6 +146,7 @@ public class ExcavationAction extends TopAction{
 						String back = excavation.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" excav "+back);
 						}
 				}
 				return ret;

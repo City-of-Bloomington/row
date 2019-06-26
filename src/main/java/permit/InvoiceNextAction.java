@@ -30,10 +30,12 @@ public class InvoiceNextAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Next")){
 						ret = "next";
+						logger.debug(" invoice next ");
 						back = invoice.doNext();
 						if(!back.equals("")){
 								ret = INPUT;
 								addActionError(back);
+								logger.debug(" invoice next "+back);
 						}
 				}
 				else{

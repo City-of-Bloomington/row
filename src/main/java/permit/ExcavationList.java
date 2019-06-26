@@ -220,6 +220,7 @@ public class ExcavationList {
 				return excavations;
 		}
 		public List<Address> getAddresses(){
+				logger.debug(" excav list addresses ");
 				if(addresses == null && excavations != null){
 						addresses = new ArrayList<Address>();
 						for(Excavation one:excavations){
@@ -339,14 +340,14 @@ public class ExcavationList {
 				}
 				if(!limit.equals(""))
 						qq += " "+limit;
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect to Database ";
+						logger.error(msg);
+						return msg;
+				}
+				logger.debug(qq);
 				try {
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect to Database ";
-								logger.error(msg);
-								return msg;
-						}
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!id.equals("")){

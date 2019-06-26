@@ -32,12 +32,14 @@ public class CutSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(action.startsWith("Show")){
+						logger.debug(" cut action save ");							
 						getCutList();
 						cutList.setNoLimit();
 						cutList.ensureAddress();
 						back = cutList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" cut action "+back);
 						}
 						else{
 								List<Excavation> list = cutList.getExcavations();
@@ -61,15 +63,15 @@ public class CutSearchAction extends TopAction{
 						}
 				}
 				else if(!action.equals("")){
+						logger.debug(" cut action ");
 						getCutList();
 						cutList.setNoLimit();
 						back = cutList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error("cut action  "+back);
 						}
 						else{
-								
-								// ret = "result";
 								cuts = cutList.getExcavations();
 								if(cuts == null || cuts.size() == 0){
 										cutsTitle = "No match found ";
@@ -94,22 +96,6 @@ public class CutSearchAction extends TopAction{
 								}
 						}
 				}
-				/*
-				else{
-						ExcavationList bl = new ExcavationList();
-						back = bl.find();
-						if(back.equals("")){
-								List<Excavation> ones = bl.getExcavations();
-								if(ones != null && ones.size() > 0){
-										excavations = ones;
-										addresses = bl.getAddresses();
-								}
-						}
-						else{
-								addActionError(back);
-						}
-				}
-				*/
 				return ret;
 		}
 		public boolean hasCuts(){
@@ -135,6 +121,7 @@ public class CutSearchAction extends TopAction{
 		// to draw the map around it
 		//
 		public Address getAddress(){
+				logger.debug("cut addresses  ");
 				double lat=0, lng=0;
 				if(addresses != null && addresses.size() > 0){
 						for(Address addr:addresses){
@@ -153,15 +140,20 @@ public class CutSearchAction extends TopAction{
 		}
 
 		public List<Type> getUtility_types(){
+				logger.debug("get util types  ");
 				TypeList bl = new TypeList("utility_types");
 				String back = bl.find();
 				if(back.equals("") && bl.getTypes() != null){
 						utility_types = bl.getTypes();
 				}
+				else{
+						logger.error("util types  "+back);
+				}
 				return utility_types;
 
 		}
 		public ApiKey getKey(){
+				logger.debug("cut get key  ");
 				ApiKeyList akl = new ApiKeyList();
 				String back = akl.find();
 				if(back.equals("")){
@@ -195,12 +187,6 @@ public class CutSearchAction extends TopAction{
 		public String getContact_name(){
 				return contact_name;
 		}
-		/**
-		public String populate(){
-				String ret = SUCCESS;
-				return ret;
-		}
-		*/
 
 }
 

@@ -132,6 +132,7 @@ public class CompanyContact{
 		}
 	
 		public Company getCompany(){
+				logger.debug(" company contact get comp");
 				if(company == null && !company_id.equals("")){
 						Company one = new Company(company_id);
 						String back = one.doSelect();
@@ -142,6 +143,7 @@ public class CompanyContact{
 				return company;
 		}
 		public Contact getContact(){
+				logger.debug(" company contact get contact");
 				if(contact == null && !contact_id.equals("")){
 						Contact one = new Contact(contact_id);
 						String back = one.doSelect();

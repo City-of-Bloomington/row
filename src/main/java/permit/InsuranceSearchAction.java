@@ -33,10 +33,13 @@ public class InsuranceSearchAction extends TopAction{
 				String ret = SUCCESS;
 				String back = doPrepare();
 				if(!action.equals("")){
+						logger.debug("insurance search action ");											
+
 						insuranceList.setNoLimit();
 						back = insuranceList.find();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("insurance search action "+back);		
 						}
 						else{
 								// ret = "result";
@@ -69,6 +72,7 @@ public class InsuranceSearchAction extends TopAction{
 						}
 						else{
 								addActionError(back);
+								logger.debug("insurance search action "+back);		
 						}
 				}
 				return ret;
@@ -102,8 +106,13 @@ public class InsuranceSearchAction extends TopAction{
 		public List<Type> getInsuranceCompanies(){
 				TypeList bl = new TypeList("bond_companies");
 				String back = bl.find();
-				if(back.equals("") && bl.getTypes() != null){
-						insuranceCompanies = bl.getTypes();
+				if(back.equals("")){
+						if(bl.getTypes() != null){
+								insuranceCompanies = bl.getTypes();
+						}
+				}
+				else{
+						logger.debug("insurance comps "+back);		
 				}
 				return insuranceCompanies;
 		}	

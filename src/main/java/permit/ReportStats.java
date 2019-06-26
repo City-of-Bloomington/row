@@ -212,13 +212,12 @@ public class ReportStats{
 				}
 				qq += qg;
 				logger.debug(qq);
-				// logger.debug(qq2);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-								return msg;
-						}
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!year.equals("")){
@@ -322,12 +321,12 @@ public class ReportStats{
 				qq2 += qg;
 				qq3 += qg;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}			
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-								return msg;
-						}
 						pstmt = con.prepareStatement(qq);
 						pstmt2 = con.prepareStatement(qq2);
 						pstmt3 = con.prepareStatement(qq3);			
@@ -496,12 +495,12 @@ public class ReportStats{
 				}
 				qq += qg;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-								return msg;
-						}
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						if(!year.equals("")){
@@ -587,12 +586,12 @@ public class ReportStats{
 				qq += " union "+qq2;
 				//
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-								return msg;
-						}
 						pstmt = con.prepareStatement(qq);
 						int jj=1;
 						pstmt.setDate(jj++, new java.sql.Date(dateFormat.parse(today).getTime()));

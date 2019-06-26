@@ -146,11 +146,15 @@ public class Receipt implements java.io.Serializable{
 		}
 		//
 		public Invoice getInvoice(){
+				logger.debug("receipts invoices ");
 				if(invoice == null && !invoice_id.equals("")){
 						Invoice one = new Invoice(invoice_id);
 						String back = one.doSelect();
 						if(back.equals("")){
 								invoice = one;
+						}
+						else{
+								logger.debug("receipts invoices "+back);
 						}
 				}
 				return invoice;
@@ -161,6 +165,9 @@ public class Receipt implements java.io.Serializable{
 						String back = one.doSelect();
 						if(back.equals("")){
 								user = one;
+						}
+						else{
+								logger.debug("receipts user "+back);
 						}
 				}
 				return user;
@@ -195,26 +202,25 @@ public class Receipt implements java.io.Serializable{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}				
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-						}
-						else{
-								pstmt = con.prepareStatement(qq);
-								pstmt.setString(1,id);
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										setValues(rs.getString(1),
-															rs.getString(2),
-															rs.getString(3),
-															rs.getString(4),
-															rs.getString(5),
-															rs.getString(6),
-															rs.getString(7),
-															rs.getString(8),
-															rs.getString(9));
-								}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,id);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								setValues(rs.getString(1),
+													rs.getString(2),
+													rs.getString(3),
+													rs.getString(4),
+													rs.getString(5),
+													rs.getString(6),
+													rs.getString(7),
+													rs.getString(8),
+													rs.getString(9));
 						}
 				}
 				catch(Exception ex){
@@ -230,7 +236,7 @@ public class Receipt implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				String qq = "insert into receipts values (0,"+
 						"?,?,?,?,?,?,?,?)";
@@ -245,10 +251,11 @@ public class Receipt implements java.io.Serializable{
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}
@@ -263,7 +270,7 @@ public class Receipt implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }
@@ -324,20 +331,21 @@ public class Receipt implements java.io.Serializable{
 						msg = "Could not connect to Database ";
 						logger.error(msg);
 						return msg;
-				}		
+				}
+				qq = "update receipts set ";
+				qq += "invoice_id = ?, ";
+				qq += "date = ?,"; 
+				qq += "payment_type =?,"; 
+				qq += "check_num =?,";
+				qq += "paid_by = ?,";
+				qq += "user_id = ?, ";
+				qq += "voided = ?, ";
+				qq += "amount_paid=? ";
+				qq += "where id=? ";
+				logger.debug(qq);
+				
 				try {
 						//
-						qq = "update receipts set ";
-						qq += "invoice_id = ?, ";
-						qq += "date = ?,"; 
-						qq += "payment_type =?,"; 
-						qq += "check_num =?,";
-						qq += "paid_by = ?,";
-						qq += "user_id = ?, ";
-						qq += "voided = ?, ";
-						qq += "amount_paid=? ";
-						qq += "where id=? ";
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						setFields(pstmt);
 						pstmt.setString(9, id);
@@ -370,8 +378,8 @@ public class Receipt implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);				
 				try {
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						pstmt.executeUpdate();

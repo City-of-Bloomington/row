@@ -71,6 +71,7 @@ public class PermitService extends HttpServlet{
 								// System.err.println(name+" "+value);
 						}
 				}
+				logger.debug("permit service ");
 				PermitList cl = null;
 				List<Permit> list = null;
 				if(!name_str.equals("")){
@@ -84,6 +85,7 @@ public class PermitService extends HttpServlet{
 						}
 				}
 				if(list != null && list.size() > 0){
+						logger.debug("permit service json ");
 						String json = writeJson(list);
 						out.println(json);
 				}

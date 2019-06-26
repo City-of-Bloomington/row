@@ -31,10 +31,12 @@ public class InspectionAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Save")){
 						ret = SUCCESS;
+						logger.debug(" insp action save ");
 						inspection.setUser_id(user.getId());
 						back = inspection.doSave();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" insp action save "+back);								
 						}
 						else{
 								id = inspection.getId();
@@ -43,11 +45,13 @@ public class InspectionAction extends TopAction{
 						}
 				}
 				else if(action.equals("Update")){
-						ret = SUCCESS;			
+						ret = SUCCESS;
+						logger.debug(" insp action update ");
 						inspection.setUser_id(user.getId());
 						back = inspection.doUpdate();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" insp action "+back);
 						}
 						else{
 								addActionMessage("Updated Successfully");
@@ -96,6 +100,7 @@ public class InspectionAction extends TopAction{
 						permit_id = val;
 		}	
 		public List<User> getInspectors(){
+				logger.debug(" insp action inspectors ");
 				InspectorList bl = new InspectorList();
 				String back = bl.find();
 				if(back.equals("") && bl.getInspectors() != null){
@@ -111,6 +116,7 @@ public class InspectionAction extends TopAction{
 						String back = inspection.doSelect();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug(" insp action pop "+back);
 						}
 				}
 				return ret;

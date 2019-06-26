@@ -28,11 +28,13 @@ public class PermitStartAction extends TopAction{
 				String ret = INPUT;
 				String back = doPrepare();
 				if(action.equals("Next")){
+						logger.debug("permit start next ");
 						ret = SUCCESS;
 						start.setUser_id(user.getId());
 						back = start.doNext();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.debug("permit start "+back);
 						}
 						else{
 								if(!start.getNeedMore()){
@@ -43,7 +45,7 @@ public class PermitStartAction extends TopAction{
 												res.sendRedirect(str);
 												return super.execute();
 										}catch(Exception ex){
-												System.err.println(ex);
+												logger.error(ex);
 										}
 								}
 						}
@@ -94,10 +96,16 @@ public class PermitStartAction extends TopAction{
 				return "To create a new permit:";
 		}
 		public List<Permit> getPermits(){
+				logger.debug("permit start permits ");
 				PermitList bl = new PermitList();
 				String back = bl.find();
-				if(back.equals("") && bl.getPermits() != null){
-						permits = bl.getPermits();
+				if(back.equals("")){
+						if(bl.getPermits() != null){
+								permits = bl.getPermits();
+						}
+				}
+				else{
+						logger.debug("permit start permits "+back);
 				}
 				return permits;
 		}	

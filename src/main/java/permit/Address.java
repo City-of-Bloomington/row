@@ -130,6 +130,7 @@ public class Address implements java.io.Serializable{
 				return address;
 		}
 		public Excavation getExcavation(){
+				logger.debug(" get excavs ");	
 				if(excavation == null && !excavation_id.equals("")){
 						Excavation one = new Excavation(excavation_id);
 						String back = one.doSelect();
@@ -140,6 +141,7 @@ public class Address implements java.io.Serializable{
 				return excavation;
 		}
 		public String getAddressFromExcavation(){
+				logger.debug(" get address from excav ");	
 				String back="";
 				getExcavation();
 				if(excavation != null){
@@ -205,7 +207,7 @@ public class Address implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(address.equals("")){
 						msg = "address is required";
@@ -231,8 +233,8 @@ public class Address implements java.io.Serializable{
 						if(debug){
 								logger.debug(qq);
 						}
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -242,7 +244,7 @@ public class Address implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }	

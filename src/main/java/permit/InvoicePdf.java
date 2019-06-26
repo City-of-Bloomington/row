@@ -124,6 +124,7 @@ public class InvoicePdf extends HttpServlet {
 				String str = "";
 				String spacer = "   ";
 				PdfPTable headTable = null;
+				logger.debug(" invoicePdf header ");
 				try{
 						//
 						// for http url use
@@ -210,6 +211,7 @@ public class InvoicePdf extends HttpServlet {
 				// paper size legal (A4) 8.5 x 11
 				// page 1-inch = 72 points
 				//
+				logger.debug(" invoicePdf pages ");
 				String fileName = "row_invoice_"+invoice.getInvoice_num()+".pdf";
 				Rectangle pageSize = new Rectangle(612, 792); // 8.5" X 11"
         Document document = new Document(pageSize, 36, 36, 18, 18);

@@ -227,6 +227,7 @@ public class Bond implements java.io.Serializable{
 				return code;
 		}	
 		public CompanyContact getCompanyContact(){
+				logger.debug(" bond get comp contact ");	
 				if(companyContact == null){
 						if(company_contact_id.equals("") && !permit_id.equals("")){
 								getPermit();
@@ -243,6 +244,7 @@ public class Bond implements java.io.Serializable{
 				return companyContact;
 		}	
 		public Contact getContact(){
+				logger.debug(" bond get contact ");	
 				getCompanyContact();
 				if(companyContact != null){
 						contact = companyContact.getContact();
@@ -250,6 +252,7 @@ public class Bond implements java.io.Serializable{
 				return contact;
 		}
 		public Company getCompany(){
+				logger.debug(" bond get comp ");	
 				getCompanyContact();
 				if(companyContact != null){
 						company =  companyContact.getCompany();
@@ -257,6 +260,7 @@ public class Bond implements java.io.Serializable{
 				return company;
 		}
 		public Permit getPermit(){
+				logger.debug(" bond get permit ");	
 				if(permit == null && !permit_id.equals("")){
 						Permit one = new Permit(permit_id);
 						String back = one.doSelect();
@@ -275,10 +279,14 @@ public class Bond implements java.io.Serializable{
 										permit_id = permit.getId();
 								}
 						}
+						else{
+								logger.error(" bond "+back);	
+						}
 				}
 				return permit;
 		}
 		public List<Permit> getPermits(){
+				logger.debug(" bond get permits ");	
 				if(permits == null && !id.equals("")){
 						PermitList  pl = new PermitList();
 						pl.setBond_id(id);
@@ -293,6 +301,9 @@ public class Bond implements java.io.Serializable{
 										}
 								}
 						}
+						else{
+								logger.error(" bond "+back);	
+						}
 				}
 				return permits;
 		}
@@ -300,6 +311,7 @@ public class Bond implements java.io.Serializable{
 				return getPermits() != null;
 		}
 		public Type getBond_company(){
+				logger.debug(" bond get bond comp ");	
 				if(bond_company == null && !bond_company_id.equals("")){
 						Type one = new Type(bond_company_id, null, "bond_companies");
 						String back = one.doSelect();
@@ -325,6 +337,7 @@ public class Bond implements java.io.Serializable{
 				return !permit_id.equals("");
 		}	
 		private void findCompanyContactFromPermit(){
+				logger.debug(" find comp contact from permit");	
 				if(permit == null){
 						getPermit();
 				}
@@ -340,6 +353,7 @@ public class Bond implements java.io.Serializable{
 		}
 		public String getInfo(){
 				String ret = "";
+				logger.debug(" bond get info ");	
 				getBond_company();
 				if(bond_company != null){
 						ret = bond_company.getName();
@@ -353,6 +367,7 @@ public class Bond implements java.io.Serializable{
 				return ret;
 		}
 		private String addBondToPermit(){
+				logger.debug(" add bond to permit ");	
 				String msg = "";
 				getPermit();
 				if(permit != null){
@@ -414,7 +429,7 @@ public class Bond implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(hasPermit() && company_contact_id.equals("")){
 						findCompanyContactFromPermit();
@@ -432,12 +447,11 @@ public class Bond implements java.io.Serializable{
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
-
 						logger.debug(qq);
-
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -447,7 +461,7 @@ public class Bond implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				if(msg.equals(""))
 						msg = doSelect();

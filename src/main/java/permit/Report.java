@@ -117,6 +117,9 @@ public class Report{
 				if(back.equals("")){
 						list = il.getInspections();
 				}
+				else{
+						logger.debug(" report "+back);
+				}
 				return back;
 		}
 		/**
@@ -131,6 +134,9 @@ public class Report{
 				String back = el.find();
 				if(back.equals("")){
 						list = el.getExcavations();
+				}
+				else{
+						logger.debug(" report active permits "+back);
 				}
 				return back;
 		}
@@ -148,6 +154,9 @@ public class Report{
 				if(back.equals("")){
 						list = el.getExcavations();
 				}
+				else{
+						logger.debug(" report "+back);
+				}
 				return back;
 		}
 		/**
@@ -162,6 +171,9 @@ public class Report{
 				String back = el.find();
 				if(back.equals("")){
 						list = el.getExcavations();
+				}
+				else{
+						logger.debug(" report "+back);
 				}
 				return back;
 		}	
@@ -178,6 +190,9 @@ public class Report{
 				if(back.equals("")){
 						list =  el.getBonds();
 				}
+				else{
+						logger.debug(" report "+back);
+				}
 				return back;
 		}
 		public String getAboutToExpireBonds(){
@@ -189,6 +204,9 @@ public class Report{
 				String back = el.find();
 				if(back.equals("")){
 						list =  el.getBonds();
+				}
+				else{
+						logger.debug(" report "+back);
 				}
 				return back;
 		}
@@ -202,6 +220,9 @@ public class Report{
 				if(back.equals("")){
 						list =  el.getInsurances();
 				}
+				else{
+						logger.debug(" report "+back);
+				}
 				return back;
 		}				
 		public String getZeroBonds(){
@@ -213,6 +234,9 @@ public class Report{
 				String back = el.find();
 				if(back.equals("")){
 						list =  el.getBonds();
+				}
+				else{
+						logger.debug(" report "+back);
 				}
 				return back;
 		}

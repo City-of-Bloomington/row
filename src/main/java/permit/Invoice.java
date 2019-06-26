@@ -215,6 +215,7 @@ public class Invoice implements java.io.Serializable{
 		}
 		public CompanyContact getCompanyContact(){
 				if(companyContact == null){
+						logger.debug("invoice get comp cont");		
 						if(company_contact_id.equals("") && !permit_id.equals("")){
 								getPermit();
 						}
@@ -223,6 +224,10 @@ public class Invoice implements java.io.Serializable{
 								String back = one.doSelect();
 								if(back.equals("")){
 										companyContact = one;
+										
+								}
+								else{
+										logger.debug("invoice "+back);		
 								}
 						}
 				}
@@ -456,6 +461,7 @@ public class Invoice implements java.io.Serializable{
 		String doNext(){
 				String back = findUnpaidPermits();
 				if(!back.equals("")){
+						logger.debug("invoice "+back);		
 						return back;
 				}
 				if(permits == null || permits.size() == 0){
@@ -475,25 +481,24 @@ public class Invoice implements java.io.Serializable{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}				
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-						}
-						else{
-								pstmt = con.prepareStatement(qq);
-								pstmt.setString(1,id);
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										setValues(rs.getString(1),
-															rs.getString(2),
-															rs.getString(3),
-															rs.getString(4),
-															rs.getString(5),
-															rs.getString(6),
-															rs.getString(7),
-															rs.getString(8));
-								}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,id);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								setValues(rs.getString(1),
+													rs.getString(2),
+													rs.getString(3),
+													rs.getString(4),
+													rs.getString(5),
+													rs.getString(6),
+													rs.getString(7),
+													rs.getString(8));
 						}
 				}
 				catch(Exception ex){
@@ -509,7 +514,7 @@ public class Invoice implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(hasPermit() && company_contact_id.equals("")){
 						findCompanyContactFromPermit();
@@ -522,15 +527,16 @@ public class Invoice implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);							
 				try {
-						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
 						logger.debug(qq);
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}
@@ -540,7 +546,7 @@ public class Invoice implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				findUnpaidPermits();
 				if(hasPermits()){
@@ -618,19 +624,20 @@ public class Invoice implements java.io.Serializable{
 						msg = "Could not connect to Database ";
 						logger.error(msg);
 						return msg;
-				}		
+				}
+				//
+				qq = "update invoices set ";
+				qq += "status = ?, ";
+				qq += "date = ?,"; 
+				qq += "company_contact_id =?,"; 
+				qq += "start_date =?,";
+				qq += "end_date = ?,";
+				qq += "notes = ?, ";
+				qq += "invoice_num = ? ";
+				qq += "where id=? ";
+				logger.debug(qq);
+				
 				try {
-						//
-						qq = "update invoices set ";
-						qq += "status = ?, ";
-						qq += "date = ?,"; 
-						qq += "company_contact_id =?,"; 
-						qq += "start_date =?,";
-						qq += "end_date = ?,";
-						qq += "notes = ?, ";
-						qq += "invoice_num = ? ";
-						qq += "where id=? ";
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						setFields(pstmt);
 						pstmt.setString(8, id);
@@ -664,8 +671,8 @@ public class Invoice implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);				
 				try {
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						pstmt.executeUpdate();
@@ -694,6 +701,9 @@ public class Invoice implements java.io.Serializable{
 				msg = pl.find();
 				if(msg.equals("")){
 						permits = pl.getPermits();
+				}
+				else{
+						logger.debug(msg);
 				}
 				return msg;		
 
@@ -737,6 +747,9 @@ public class Invoice implements java.io.Serializable{
 								permits = pl.getPermits();
 						else
 								newPermits = pl.getPermits();
+				}
+				else{
+						logger.error(msg);
 				}
 				return msg;
 		}

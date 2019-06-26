@@ -26,10 +26,12 @@ public class ReportStatsAction extends TopAction{
 				doPrepare(); 
 				if(action.equals("Submit")){
 						ret = SUCCESS;
+						logger.debug(" report stats action ");
 						String back = report.find();
 						if(!back.equals("")){
 								addActionError(back);
 								ret = INPUT;
+								logger.debug(" report stats action "+back);
 						}
 				}
 				return ret;
@@ -46,6 +48,7 @@ public class ReportStatsAction extends TopAction{
 		}
 		public List<String> getYears(){
 				if(years == null){
+						logger.debug(" report stats get years ");
 						int yy = Helper.getCurrentYear();
 						years = new ArrayList<String>(11);
 						years.add("");

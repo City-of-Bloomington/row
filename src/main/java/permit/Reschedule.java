@@ -57,6 +57,7 @@ public class Reschedule{
 		public String doProcess(){
 		
 				String msg = "";
+				logger.debug(" reschedule doProcess ");
 				if(bond_flag){
 						BondList bl = new BondList();
 						bl.setActiveOnly();
@@ -81,6 +82,7 @@ public class Reschedule{
 												shed.run();
 										}catch(Exception ex){
 												msg += ex;
+												logger.debug(" reschedule "+msg);
 										}
 								}
 						}
@@ -108,6 +110,7 @@ public class Reschedule{
 												shed.run();
 										}catch(Exception ex){
 												msg += ex;
+												logger.debug(" reschedule "+msg);
 										}
 								}
 						}

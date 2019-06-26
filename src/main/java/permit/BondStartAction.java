@@ -30,10 +30,12 @@ public class BondStartAction extends TopAction{
 				String back = doPrepare();
 				if(action.equals("Next")){
 						ret = SUCCESS;
+						logger.debug(" bond start action ");
 						start.setUser_id(user.getId());
 						back = start.doNext();
 						if(!back.equals("")){
 								addActionError(back);
+								logger.error(" bond start action "+back);
 						}
 						else{
 								if(!start.getNeedMore()){
@@ -96,6 +98,7 @@ public class BondStartAction extends TopAction{
 				return "To create a new bond:";
 		}
 		public List<Bond> getBonds(){
+				logger.debug(" bond list ");
 				BondList bl = new BondList();
 				String back = bl.find();
 				if(back.equals("") && bl.getBonds() != null){

@@ -148,12 +148,16 @@ public class Inspection implements java.io.Serializable{
 				return notes;
 		}
 		public Permit getPermit(){
+				logger.debug(" permits ");
 				if(permit == null){
 						if(!permit_id.equals("")){
 								Permit one = new Permit(permit_id);
 								String back = one.doSelect();
 								if(back.equals("")){
 										permit = one;
+								}
+								else{
+										logger.debug(" permit "+back);
 								}
 						}
 						else if(!permit_num.equals("")){
@@ -166,11 +170,15 @@ public class Inspection implements java.io.Serializable{
 												permit = ones.get(0);
 										}
 								}
+								else{
+										logger.debug(" permit "+back);
+								}
 						}
 				}
 				return permit;
 		}
 		public User getInspector(){
+				logger.debug(" inspector ");
 				if(inspector == null && !inspector_id.equals("")){
 						User one = new User(inspector_id);
 						String back = one.doSelect();
@@ -207,27 +215,26 @@ public class Inspection implements java.io.Serializable{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
 				try{
-						con = Helper.getConnection();
-						if(con == null){
-								msg = "Could not connect ";
-						}
-						else{
-								pstmt = con.prepareStatement(qq);
-								pstmt.setString(1,id);
-								rs = pstmt.executeQuery();
-								if(rs.next()){
-										setValues(rs.getString(1),
-															rs.getString(2),
-															rs.getString(3),
-															rs.getString(4),
-															rs.getString(5),
-															rs.getString(6),
-															rs.getString(7),
-															rs.getString(8),
-															rs.getString(9)
-															);
-								}
+						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1,id);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								setValues(rs.getString(1),
+													rs.getString(2),
+													rs.getString(3),
+													rs.getString(4),
+													rs.getString(5),
+													rs.getString(6),
+													rs.getString(7),
+													rs.getString(8),
+													rs.getString(9)
+													);
 						}
 				}
 				catch(Exception ex){
@@ -243,7 +250,7 @@ public class Inspection implements java.io.Serializable{
 		
 				String msg = "";
 				Connection con = null;
-				PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null, pstmt2=null;
 				ResultSet rs = null;
 				if(permit_num.equals("")){
 						getPermit();
@@ -260,17 +267,15 @@ public class Inspection implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);							
 				try {
-						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
+						//
 						qq = "select LAST_INSERT_ID() ";
-
-						logger.debug(qq);
-
-						pstmt = con.prepareStatement(qq);			
-						rs = pstmt.executeQuery();
+						pstmt2 = con.prepareStatement(qq);			
+						rs = pstmt2.executeQuery();
 						if(rs.next()){
 								id = rs.getString(1);
 						}			
@@ -280,7 +285,7 @@ public class Inspection implements java.io.Serializable{
 						logger.error(ex+":"+qq);
 				}
 				finally{
-						Helper.databaseDisconnect(con, pstmt, rs);
+						Helper.databaseDisconnect(con, rs, pstmt, pstmt2);
 				}
 				return msg;
     }	
@@ -339,19 +344,19 @@ public class Inspection implements java.io.Serializable{
 						msg = "Could not connect to Database ";
 						logger.error(msg);
 						return msg;
-				}		
+				}
+				qq = "update inspections set ";
+				qq += "inspector_id = ?,"; 
+				qq += "date =?,"; 
+				qq += "permit_num =?, ";
+				qq += "notes = ?,";
+				qq += "status = ?,";
+				qq += "has_picture =?,";
+				qq += "followup_date = ? ";
+				qq += "where id=? ";
+				logger.debug(qq);
 				try {
 						//
-						qq = "update inspections set ";
-						qq += "inspector_id = ?,"; 
-						qq += "date =?,"; 
-						qq += "permit_num =?, ";
-						qq += "notes = ?,";
-						qq += "status = ?,";
-						qq += "has_picture =?,";
-						qq += "followup_date = ? ";
-						qq += "where id=? ";
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						setFields(pstmt);
 						pstmt.setString(8, id);
@@ -384,8 +389,8 @@ public class Inspection implements java.io.Serializable{
 						logger.error(msg);
 						return msg;
 				}
+				logger.debug(qq);				
 				try {
-						logger.debug(qq);
 						pstmt = con.prepareStatement(qq);
 						pstmt.setString(1, id);
 						pstmt.executeUpdate();

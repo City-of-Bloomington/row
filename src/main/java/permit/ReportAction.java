@@ -31,10 +31,12 @@ public class ReportAction extends TopAction{
 				String ret = INPUT;            // default
 				if(action.equals("Submit")){
 						ret = SUCCESS;
+						logger.debug(" report action ");
 						back = report.find();
 						if(!back.equals("")){
 								addActionError(back);
 								ret = INPUT;
+								logger.debug(" report action "+back);
 						}
 				}
 				return ret;
@@ -51,6 +53,7 @@ public class ReportAction extends TopAction{
 		}
 		public List<Type> getReport_types(){
 				if(report_types == null){
+						logger.debug(" report action types ");
 						report_types = new ArrayList<Type>(4);
 						report_types.add(new Type("active_permits","Active Permits"));
 						report_types.add(new Type("cbu","CBU Permits"));
