@@ -62,6 +62,25 @@ public class CutSearchAction extends TopAction{
 								}
 						}
 				}
+				else if(action.startsWith("Export")){
+						logger.debug(" cut action save ");							
+						getCutList();
+						cutList.setNoLimit();
+						cutList.ensureAddress();
+						back = cutList.find();
+						if(!back.equals("")){
+								addActionError(back);
+								logger.error(" cut action "+back);
+						}
+						else{
+								List<Excavation> list = cutList.getExcavations();
+								List<Address> addrList = cutList.getAddresses(); 
+								addActionMessage("Matched "+list.size());
+								cuts = list;
+								addresses = addrList;
+								ret = "csv";
+						}
+				}
 				else if(!action.equals("")){
 						logger.debug(" cut action ");
 						getCutList();

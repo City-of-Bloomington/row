@@ -229,7 +229,8 @@
 				<result name="success">/WEB-INF/jsp/excavationSearch.jsp</result>
 				<result name="excavResult">/WEB-INF/jsp/searchResult.jsp</result>				
 				<result name="map">/WEB-INF/jsp/drawMarkersMap.jsp</result>
-				<result name="map2">/WEB-INF/jsp/drawMarkersMap2.jsp</result>		
+				<result name="map2">/WEB-INF/jsp/drawMarkersMap2.jsp</result>
+				<result name="csv">/WEB-INF/jsp/excavations_csv.jsp</result>				
       </action>
       <action name="cutSearch" 
               class="permit.CutSearchAction" 
@@ -240,7 +241,8 @@
 				<result name="success">/WEB-INF/jsp/cutSearch.jsp</result>
 				<result name="cutResult">/WEB-INF/jsp/cutResult.jsp</result>				
 				<result name="map">/WEB-INF/jsp/drawMarkersMap.jsp</result>
-				<result name="map2">/WEB-INF/jsp/drawMarkersMap2.jsp</result>		
+				<result name="map2">/WEB-INF/jsp/drawMarkersMap2.jsp</result>
+				<result name="csv">/WEB-INF/jsp/excavations_csv.jsp</result>	
       </action>			
       <action name="inspectionSearch" 
               class="permit.InspectionSearchAction" 

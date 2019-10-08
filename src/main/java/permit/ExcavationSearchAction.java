@@ -64,6 +64,24 @@ public class ExcavationSearchAction extends TopAction{
 								}
 						}
 				}
+				if(action.startsWith("Export")){ // CSV
+						logger.debug(" excav search csv output");
+						getExcavList();
+						excavList.setNoLimit();
+						excavList.ensureAddress();
+						back = excavList.find();
+						if(!back.equals("")){
+								addActionError(back);
+								logger.debug(" excav search "+back);
+						}
+						else{
+								List<Excavation> list = excavList.getExcavations();
+								List<Address> addrList = excavList.getAddresses(); 
+								excavations = list;
+								addresses = addrList;
+								ret = "csv"; // csv output
+						}
+				}				
 				else if(!action.equals("")){
 						logger.debug(" excav search ");
 						getExcavList();

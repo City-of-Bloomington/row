@@ -127,7 +127,8 @@ Notes:
 		<tr>
 			<td><table width="100%">
 				<tr>
-					<td align="center"><s:submit name="action" value="Submit"/></td>
+					<td align="left"><s:submit name="action" value="Submit"/></td>
+					<td align="center"><s:submit name="action" value="Export as CSV"/></td>					
 					<td align="right"><s:submit name="action" value="Show on map" /></td>
 				</tr>
 			</table>
