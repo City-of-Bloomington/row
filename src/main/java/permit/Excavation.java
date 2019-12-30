@@ -150,7 +150,7 @@ public class Excavation implements java.io.Serializable{
 						cut_type = value;
 		}	
 		public void setUtility_type_id(String value){
-				if(value != null)		
+				if(value != null && !value.equals("-1"))		
 						utility_type_id = value;
 		}
 		public void setUser_id(String value){
