@@ -411,7 +411,8 @@ public class ExcavationList {
 																								rs.getString(13),
 																								rs.getString(14)
 																								);
-								excavations.add(one);
+								if(!excavations.contains(one))
+										excavations.add(one);
 						}
 				}
 				catch (Exception ex){

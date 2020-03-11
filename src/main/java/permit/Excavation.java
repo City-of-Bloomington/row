@@ -198,6 +198,29 @@ public class Excavation implements java.io.Serializable{
 		public String getUtility_type_id(){
 				return utility_type_id ;
 		}
+		public boolean equals(Object obj){
+				if(this == obj) return true;
+				if(obj != null && obj instanceof Excavation){
+						Excavation one = (Excavation) obj;
+						return one.getId().equals(id);
+				}
+				return false;
+		}
+		public int hashCode(){
+				int ret = 37;
+				if(id != null){
+						try{
+								ret += Integer.parseInt(id);
+						}catch(Exception ex){
+
+						}
+				}
+				return ret;
+		}
+		public String toString(){
+				return id;
+		}
+				
 		public boolean hasValidAddress(){
 				getAddress();
 				if(address != null){
