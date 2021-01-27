@@ -22,7 +22,7 @@ public class ExcavationList {
 		String company_name = "";
 		String searchStr = "";
 		boolean activeOnly = false, ensureAddress=false;
-		boolean coordsOnly = true;
+		boolean coordsOnly = true, forMap = false;
 		static final long serialVersionUID = 112L;	
 		static Logger logger = LogManager.getLogger(ExcavationList.class);
 		
@@ -149,6 +149,9 @@ public class ExcavationList {
 		public void ensureAddress(){
 				ensureAddress = true;
 		}
+		public void forMap(){
+				forMap = true;
+		}		
 		public void setActiveOnly(){
 				activeOnly = true;
 		}
@@ -320,6 +323,12 @@ public class ExcavationList {
 						qw += " cm.name like ? ";
 				}
 				if(ensureAddress){
+						/**
+						if(!qw.equals("")) qw += " and ";
+						qw += " ((not a.loc_long is null) and a.loc_long < 0 and a.loc_lat >0)";
+						*/
+				}
+				if(forMap){
 						if(!qw.equals("")) qw += " and ";
 						qw += " ((not a.loc_long is null) and a.loc_long < 0 and a.loc_lat >0)";
 				}

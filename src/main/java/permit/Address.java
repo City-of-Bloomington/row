@@ -161,6 +161,9 @@ public class Address implements java.io.Serializable{
 				}
 				return back;
 		}
+		public boolean hasLatLong(){
+				return !(loc_lat.isEmpty() || loc_long.isEmpty());
+		}
 		public boolean isValidAddress(){
 				return !(address.equals("") || loc_lat.equals("") || loc_long.equals(""));
 		}

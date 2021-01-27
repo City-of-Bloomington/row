@@ -36,7 +36,7 @@ public class ExcavationSearchAction extends TopAction{
 						logger.debug(" excav search show");
 						getExcavList();
 						excavList.setNoLimit();
-						excavList.ensureAddress();
+						excavList.forMap();
 						back = excavList.find();
 						if(!back.equals("")){
 								addActionError(back);
@@ -68,7 +68,7 @@ public class ExcavationSearchAction extends TopAction{
 						logger.debug(" excav search csv output");
 						getExcavList();
 						excavList.setNoLimit();
-						excavList.ensureAddress();
+						// excavList.ensureAddress();
 						back = excavList.find();
 						if(!back.equals("")){
 								addActionError(back);
@@ -92,7 +92,6 @@ public class ExcavationSearchAction extends TopAction{
 								logger.debug(" excav search "+back);
 						}
 						else{
-								
 								// ret = "result";
 								excavations = excavList.getExcavations();
 								if(excavations == null || excavations.size() == 0){
