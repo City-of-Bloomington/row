@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 
 public class PermitPdf extends HttpServlet {
 
-    String url="",url2="";
+    String url="",url2="", urlHttp="";
 		static Logger logger = LogManager.getLogger(PermitPdf.class);
     boolean debug = false;
 		static final long serialVersionUID = 1136L;
@@ -72,6 +72,9 @@ public class PermitPdf extends HttpServlet {
 				if(url.equals("")){
 						url    = getServletContext().getInitParameter("url");
 				}
+				if(urlHttp.equals("")){
+						urlHttp = getServletContext().getInitParameter("urlHttp");
+				}				
 				User user = null;
 				HttpSession session = req.getSession(false);
 				if(session != null){
@@ -146,7 +149,7 @@ public class PermitPdf extends HttpServlet {
 						//
 						// for http url use
 						//
-						Image image = Image.getInstance(url+"js/images/city_logo3.jpg");
+						Image image = Image.getInstance(urlHttp+"city_logo3.jpg");
 
 						Font fnt = new Font(Font.TIMES_ROMAN, 10, 
 																Font.NORMAL);
@@ -157,7 +160,6 @@ public class PermitPdf extends HttpServlet {
 						headTable.setWidthPercentage(100);
 						headTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 						headTable.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-						// image.setWidthPercentage(33.0f);
 						image.scalePercent(15f);
 						PdfPCell cell = new PdfPCell(image);
 						cell.setBorder(Rectangle.NO_BORDER);
