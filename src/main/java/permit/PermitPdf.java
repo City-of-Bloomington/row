@@ -297,18 +297,22 @@ public class PermitPdf extends HttpServlet {
 						//
 						// 2nd row
 						//
-						cell = new PdfPCell(new Phrase("Responsible", fntb));
-						cell.setBorder(Rectangle.NO_BORDER);
-						table.addCell(cell);
-						cell = new PdfPCell(new Phrase(permit.getContact().getFullName(), fnt));
-						cell.setBorder(Rectangle.NO_BORDER);
-						table.addCell(cell);
-						cell = new PdfPCell(new Phrase("Inspector", fntb));
-						cell.setBorder(Rectangle.NO_BORDER);
-						table.addCell(cell);
-						cell = new PdfPCell(new Phrase(permit.getReviewer().getFullName(), fnt));
-						cell.setBorder(Rectangle.NO_BORDER);
-						table.addCell(cell);			
+						if(permit.getContact() != null){
+								cell = new PdfPCell(new Phrase("Responsible", fntb));
+								cell.setBorder(Rectangle.NO_BORDER);
+								table.addCell(cell);
+								cell = new PdfPCell(new Phrase(permit.getContact().getFullName(), fnt));
+								cell.setBorder(Rectangle.NO_BORDER);
+								table.addCell(cell);
+						}
+						if(permit.getReviewer() != null){
+								cell = new PdfPCell(new Phrase("Inspector", fntb));
+								cell.setBorder(Rectangle.NO_BORDER);
+								table.addCell(cell);
+								cell = new PdfPCell(new Phrase(permit.getReviewer().getFullName(), fnt));
+								cell.setBorder(Rectangle.NO_BORDER);
+								table.addCell(cell);
+						}
 						cell = new PdfPCell(new Phrase("Date Issued", fntb));
 						cell.setBorder(Rectangle.NO_BORDER);
 						table.addCell(cell);
@@ -378,12 +382,28 @@ public class PermitPdf extends HttpServlet {
 						List<Excavation> list = permit.getExcavations();
 						if(list != null && list.size() > 0){
 								for(Excavation one:list){
-										cell = new PdfPCell(new Phrase(one.getAddress().getAddress(), fnt));
+										if(one.getAddress() != null){
+												cell = new PdfPCell(new Phrase(one.getAddress().getAddress(), fnt));
+										}
+										else{
+												cell = new PdfPCell(new Phrase(" ", fnt));
+										}
 										table.addCell(cell);
-										cell = new PdfPCell(new Phrase(one.getCut_type(), fnt));
-										table.addCell(cell);
-										cell = new PdfPCell(new Phrase(one.getUtility_type().getName(), fnt));
-										table.addCell(cell);					
+										if(one.getCut_type() != null){
+												cell = new PdfPCell(new Phrase(one.getCut_type(), fnt));
+
+										}
+										else{
+												cell = new PdfPCell(new Phrase(" ", fnt));
+										}
+										table.addCell(cell);										
+										if(one.getUtility_type() != null){
+												cell = new PdfPCell(new Phrase(one.getUtility_type().getName(), fnt));
+										}
+										else{
+												cell = new PdfPCell(new Phrase(" ", fnt));
+										}
+										table.addCell(cell);										
 										cell = new PdfPCell(new Phrase(one.getCut_description(), fnt));
 										table.addCell(cell);
 										cell = new PdfPCell(new Phrase(one.getWidth(), fnt));
@@ -445,12 +465,14 @@ public class PermitPdf extends HttpServlet {
 						ch = new Chunk("\n\n___________________\n", fnt);
 						phrase = new Phrase();
 						phrase.add(ch);
-						pp.add(phrase);			
-						ch = new Chunk(permit.getReviewer().getFullName(), fnt);
-						phrase = new Phrase();
-						phrase.add(ch);
 						pp.add(phrase);
-						document.add(pp);			
+						if(permit.getReviewer() != null){
+								ch = new Chunk(permit.getReviewer().getFullName(), fnt);
+								phrase = new Phrase();
+								phrase.add(ch);
+								pp.add(phrase);
+						}
+						document.add(pp);
 						document.close();
 						writer.close();
 						res.setHeader("Expires", "0");
