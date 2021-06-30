@@ -279,9 +279,16 @@ public class PermitPdf extends HttpServlet {
 						cell = new PdfPCell(new Phrase("Company", fntb));
 						cell.setBorder(Rectangle.NO_BORDER);
 						table.addCell(cell);
-						cell = new PdfPCell(new Phrase(permit.getCompany().getName(), fnt));
-						cell.setBorder(Rectangle.NO_BORDER);
-						table.addCell(cell);
+						if(permit.hasCompany()){
+								cell = new PdfPCell(new Phrase(permit.getCompany().getName(), fnt));
+								cell.setBorder(Rectangle.NO_BORDER);
+								table.addCell(cell);
+						}
+						else{
+								cell = new PdfPCell(new Phrase(" ", fnt));
+								cell.setBorder(Rectangle.NO_BORDER);
+								table.addCell(cell);
+						}
 						cell = new PdfPCell(new Phrase("Status", fntb));
 						cell.setBorder(Rectangle.NO_BORDER);
 						table.addCell(cell);
@@ -297,7 +304,7 @@ public class PermitPdf extends HttpServlet {
 						//
 						// 2nd row
 						//
-						if(permit.getContact() != null){
+						if(permit.hasContact()){
 								cell = new PdfPCell(new Phrase("Responsible", fntb));
 								cell.setBorder(Rectangle.NO_BORDER);
 								table.addCell(cell);
@@ -305,7 +312,7 @@ public class PermitPdf extends HttpServlet {
 								cell.setBorder(Rectangle.NO_BORDER);
 								table.addCell(cell);
 						}
-						if(permit.getReviewer() != null){
+						if(permit.hasReviewer()){
 								cell = new PdfPCell(new Phrase("Inspector", fntb));
 								cell.setBorder(Rectangle.NO_BORDER);
 								table.addCell(cell);

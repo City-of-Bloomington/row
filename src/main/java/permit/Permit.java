@@ -297,7 +297,8 @@ public class Permit implements java.io.Serializable{
 						}
 				}
 				return invoice;
-		}	
+		}
+				
 		public CompanyContact getCompanyContact(){
 				logger.debug(" get company contact ");
 				if(companyContact == null && !company_contact_id.equals("")){
@@ -443,6 +444,11 @@ public class Permit implements java.io.Serializable{
 						}
 				}
 				return reviewer;
+		}
+		public boolean hasReviewer(){
+				if(reviewer == null)
+						getReviewer();
+				return reviewer != null;
 		}
 		/**
 		 * eventhough we have only one bond per permit
