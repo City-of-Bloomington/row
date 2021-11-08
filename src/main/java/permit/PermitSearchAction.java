@@ -23,7 +23,7 @@ public class PermitSearchAction extends TopAction{
 		//
 		List<Permit> permits = null;
 		PermitList permitList = null;
-		List<User> inspectors = null;
+		List<Inspector> inspectors = null;
 		String company_name="", contact_name="";
 		String permitsTitle = "Most Recent Permits";
 		
@@ -90,8 +90,7 @@ public class PermitSearchAction extends TopAction{
 				return permitsTitle;
 		}
 
-		public List<User> getInspectors(){
-				logger.debug(" get inspector list ");
+		public List<Inspector> getInspectors(){
 				InspectorList bl = new InspectorList();
 				String back = bl.find();
 				if(back.equals("") && bl.getInspectors() != null){

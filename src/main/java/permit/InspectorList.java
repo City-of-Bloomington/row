@@ -16,7 +16,7 @@ public class InspectorList{
 		static Logger logger = LogManager.getLogger(InspectorList.class);
 		static final long serialVersionUID = 151L;
 		boolean activeOnly = false;
-		List<User> inspectors = null;
+		List<Inspector> inspectors = null;
     String errors = "";
     public InspectorList(){
     }
@@ -29,7 +29,7 @@ public class InspectorList{
 		public void setActiveOnly(){
 				activeOnly = true;
 		}
-		public List<User> getInspectors(){
+		public List<Inspector> getInspectors(){
 				return inspectors;
 		}
     /**
@@ -39,11 +39,17 @@ public class InspectorList{
 		public String find(){
 		
 				String msg="";
-				String qq = "select u.id,u.empid,u.fullname,u.role,s.active from users u,inspectors s where s.user_id=u.id ";				
-				// String qq = "select * from users u,inspectors s where u.id=s.user_id order by u.fullname";
 				Connection con = null;
 				Statement stmt = null;
 				ResultSet rs = null;
+				
+				String qq = "select u.id,u.empid,u.fullname,u.role,u.active,s.phone,s.fax_num,s.active from users u,inspectors s where s.user_id=u.id ";				
+
+				if(activeOnly){
+						qq += " and s.active is not null and u.active is not null ";
+				}
+				qq += " order by u.fullname ";
+				
 				logger.debug(qq);
 				con = Helper.getConnection();
 				if(con == null){
@@ -51,20 +57,20 @@ public class InspectorList{
 						return msg;
 				}		
 				try{
-						if(activeOnly){
-								qq += " and s.active is not null ";
-						}
-						qq += " order by u.fullname ";
 						stmt = con.createStatement();
 						rs = stmt.executeQuery(qq);
-						inspectors = new ArrayList<User>();
+						inspectors = new ArrayList<>();
 						while(rs.next()){
-								String str = rs.getString(1);
-								String str2 = rs.getString(2); 
-								String str3 = rs.getString(3);
-								String str4 = rs.getString(4);
-								String str5 = rs.getString(5);
-								User one = new User(str, str2, str3, str4, str5);
+								Inspector one =
+										new Inspector(
+																	rs.getString(1),
+																	rs.getString(2), 
+																	rs.getString(3),
+																	rs.getString(4),
+																	rs.getString(5),
+																	rs.getString(6),
+																	rs.getString(7),
+																	rs.getString(8));
 								inspectors.add(one);
 						}
 				}

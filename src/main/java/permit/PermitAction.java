@@ -24,7 +24,7 @@ public class PermitAction extends TopAction{
 		static Logger logger = LogManager.getLogger(PermitAction.class);
 		//
 		Permit permit = null; 
-		List<User> inspectors = null;
+		List<Inspector> inspectors = null;
 		List<Type> utility_types = null;
 		List<Bond> bonds = null; // for new permit we need list of bonds
 		//
@@ -114,7 +114,7 @@ public class PermitAction extends TopAction{
 				return bonds;
 		}
 
-		public List<User> getInspectors(){
+		public List<Inspector> getInspectors(){
 				logger.debug("permit action get inspectors ");
 				InspectorList bl = new InspectorList();
 				String back = bl.find();

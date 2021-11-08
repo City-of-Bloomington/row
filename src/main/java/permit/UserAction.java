@@ -20,7 +20,7 @@ public class UserAction extends TopAction{
 
 		static final long serialVersionUID = 205L;	
 
-		static Logger logger = LogManager.getLogger(ReceiptAction.class);
+		static Logger logger = LogManager.getLogger(UserAction.class);
 		//
 		User rowUser = null;
 		List<User> users = null;
@@ -79,7 +79,7 @@ public class UserAction extends TopAction{
 		}
 
 		public String getId(){
-				if(id.equals("") && user != null){
+				if(id.isEmpty() && rowUser != null){
 						id = rowUser.getId();
 				}
 				return id;

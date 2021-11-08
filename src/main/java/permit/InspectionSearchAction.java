@@ -24,7 +24,7 @@ public class InspectionSearchAction extends TopAction{
 		//
 		List<Inspection> inspections = null;
 		List<Type> utility_types = null;
-		List<User> inspectors = null;
+		List<Inspector> inspectors = null;
 		InspectionList inspectionList = null;
 
 		String inspectionsTitle = "Most recent inspections";
@@ -88,7 +88,7 @@ public class InspectionSearchAction extends TopAction{
 		public String getInspectionsTitle(){
 				return inspectionsTitle;
 		}
-		public List<User> getInspectors(){
+		public List<Inspector> getInspectors(){
 				logger.debug("insp search inspectors ");		
 				InspectorList bl = new InspectorList();
 				String back = bl.find();

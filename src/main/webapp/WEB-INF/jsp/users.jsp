@@ -10,7 +10,7 @@
     <s:actionerror/>
   </div>
 </s:if>
-<h3><s:property value="#receiptsTitle" /></h3>
+<h3><s:property value="#usersTitle" /></h3>
 <table border="1">
   <tr>
 		<td>ID</td>
@@ -22,7 +22,7 @@
   <s:iterator var="one" value="#users" status="rowStatus">
 		<tr <s:if test="rowStatus.even">style="background:lightgray"</s:if>>
 			<td>
-				<a href="<s:property value='#application.url' />user.action?id=<s:property value='id' />"> <s:property value="id" /></a>
+				<a href="<s:property value='#application.url' />user.action?id=<s:property value='id' />"> Update <s:property value="id" /></a>
 			</td>				  
 			<td>
 					<s:property value="empid" />

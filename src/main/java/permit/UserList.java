@@ -64,5 +64,43 @@ public class UserList{
 				}
 				return msg;
 		}
+		public String findNonInspectorUsers(){
+		
+				String msg="";
+		
+				String qq = "select u.id,u.empid, u.fullname, u.role, u.active from users u where u.id not in (select user_id from inspectors) ";
+				Connection con = null;
+				Statement stmt = null;
+				ResultSet rs = null;
+				logger.debug(qq);
+				con = Helper.getConnection();
+				if(con == null){
+						msg = "Could not connect ";
+						return msg;
+				}
+				try{
+						stmt = con.createStatement();
+						users = new ArrayList<>();
+						rs = stmt.executeQuery(qq);
+						while(rs.next()){
+								User one = new User(rs.getString(1),
+																		rs.getString(2),
+																		rs.getString(3),
+																		rs.getString(4),
+																		rs.getString(5));
+								if(!users.contains(one))
+										users.add(one);
+						}
+				}
+				catch(Exception ex){
+						msg += " "+ex;
+						logger.error(ex+" : "+qq);
+				}
+				finally{
+						Helper.databaseDisconnect(con, stmt, rs);
+				}
+				return msg;
+		}		
+		
 	
 }

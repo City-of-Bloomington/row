@@ -23,7 +23,7 @@ public class InspectionAction extends TopAction{
 		static Logger logger = LogManager.getLogger(InspectionAction.class);
 		//
 		Inspection inspection = null; 
-		List<User> inspectors = null;
+		List<Inspector> inspectors = null;
 		List<Type> utility_types = null;
 
 		public String execute(){
@@ -99,7 +99,7 @@ public class InspectionAction extends TopAction{
 				if(val != null)
 						permit_id = val;
 		}	
-		public List<User> getInspectors(){
+		public List<Inspector> getInspectors(){
 				logger.debug(" insp action inspectors ");
 				InspectorList bl = new InspectorList();
 				String back = bl.find();
