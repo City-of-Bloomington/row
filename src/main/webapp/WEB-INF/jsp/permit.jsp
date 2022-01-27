@@ -34,7 +34,11 @@
   </s:elseif>
   <p>* Indicate a required field</p>
   <s:if test="permit.id == ''">
-		<p>** If there is a list of available bonds, you can pick one. If you want to use a new bond, ignore the bond field now. You will be able to add a new bond after you Save by clicking on 'Add Bond'.The same applies to insurance.</p> 
+		<p>Please note the following</p>
+		<ul>
+			<li> * Make sure the 'Permit Number' is unique and not used before </li>
+			<li> ** If there is a list of available bonds, you can pick one. If you want to use a new bond, ignore the bond field now. You will be able to add a new bond after you Save by clicking on 'Add Bond'.The same applies to insurance.</li>
+		</ul>
   </s:if>
   <table border="1" width="100%" cellpadding="0" cellspacing="0">
 		<caption>Permit Info</caption>

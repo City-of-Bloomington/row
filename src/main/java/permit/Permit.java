@@ -569,8 +569,13 @@ public class Permit implements java.io.Serializable{
 				if(reviewer_id.equals("") && !user_id.equals("")){
 						reviewer_id = user_id;
 				}
-
-				String qq = "insert into excavpermits values (0,"+
+				if(permit_num.trim().isEmpty()){
+						msg = "Permit number is required";
+						logger.error(msg);
+						return msg;
+				}
+				String qq = "select count(*) from excavpermits where permit_num=?";
+				String qq2 = "insert into excavpermits values (0,"+
 						" ?,?,?,?,?, ?,?,?,?,?, "+
 						"?,?,?)";
 				con = Helper.getConnection();
@@ -580,8 +585,22 @@ public class Permit implements java.io.Serializable{
 						return msg;
 				}
 				try {
+						int cnt = 0;
 						logger.debug(qq);			
 						pstmt = con.prepareStatement(qq);
+						pstmt.setString(1, permit_num);
+						rs = pstmt.executeQuery();
+						if(rs.next()){
+								cnt = rs.getInt(1);
+						}
+						if(cnt == 1){
+								msg = "Permit #: "+permit_num+" already exists, use different permit number or use the existing permit "+permit_num;
+								logger.error(msg);
+								return msg;
+						}
+						qq = qq2;
+						logger.debug(qq);			
+						pstmt = con.prepareStatement(qq);						
 						msg += setFields(pstmt);
 						pstmt.executeUpdate();
 						//
@@ -615,6 +634,7 @@ public class Permit implements java.io.Serializable{
 				int seq = 0; // if start from scratch
 				String qq = "select permit_num from permit_seq where year=? order by id DESC ";
 				String qq2 = " insert into permit_seq values(0,?,?)";
+				String qq3 = " select count(*) from excavpermits where permit_num=?";
 				int year = Helper.getCurrentYear() % 100; // yy format
 				con = Helper.getConnection();
 				if(con == null){
@@ -630,22 +650,33 @@ public class Permit implements java.io.Serializable{
 						if(rs.next()){
 								seq = rs.getInt(1);
 						}
-						seq++;
-						qq = qq2;
-						pstmt = con.prepareStatement(qq);
-						pstmt.setInt(1, seq);
-						pstmt.setInt(2, year);
-						pstmt.executeUpdate();
-
-						String str = ""+seq;
-						if(seq < 10){
-								str = "00"+seq;
-						}
-						else if(seq < 100){
-								str = "0"+seq;
-						}
-						permit_num = "C"+year+"-ROW-"+str;			
-			
+						int cnt = 1;
+						while(cnt > 0){
+								seq++;
+								qq = qq2;
+								pstmt = con.prepareStatement(qq);
+								pstmt.setInt(1, seq);
+								pstmt.setInt(2, year);
+								pstmt.executeUpdate();
+								String str = ""+seq;
+								if(seq < 10){
+										str = "00"+seq;
+								}
+								else if(seq < 100){
+										str = "0"+seq;
+								}
+								permit_num = "C"+year+"-ROW-"+str;
+								qq = qq3;
+								pstmt = con.prepareStatement(qq);
+								pstmt.setString(1, permit_num);
+								rs = pstmt.executeQuery();
+								if(rs.next()){
+										cnt = rs.getInt(1);
+								}
+								else{
+										cnt = 0;
+								}
+						}						
 				}
 				catch (Exception ex){
 						msg += ex+":"+qq;
