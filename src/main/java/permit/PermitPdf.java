@@ -40,17 +40,17 @@ public class PermitPdf extends HttpServlet {
     boolean debug = false;
 		static final long serialVersionUID = 1136L;
 		static final String[] conditions = {
-				"Permittee is required to call the Planning and Transportation Department at 812-349-3423 for inspection of any work at the City of Bloomington Right of way prior to placing any concrete, or at any point specified in the Specific Conditions of Approval.",
-				"This approval only covers concerns within the jurisdictions of the City of Bloomington Planning and Transportaion Department, other entities or agencies may also need to grant approval for work done in the course of this project.",
+				"Permittee is required to call the Engineering Department at 812-349-3913 for inspection of any work at the City of Bloomington Right of way prior to placing any concrete, or at any point specified in the Specific Conditions of Approval.",
+				"This approval only covers concerns within the jurisdictions of the City of Bloomington Engineering Department, other entities or agencies may also need to grant approval for work done in the course of this project.",
 				"Projects shall conform to all current A.D.A.,(Americans with Disabilities Act) requirements.",
 				"All utility work shall conform to specifications to be obtained from the owner of the affected utility, and work on said utility shall be performed only with expressed permission of its owner. It shall be the responsibility of the permittee to obtain any necessary inspections or approvals from the owner of the utilites involved.",
 				"Permittee shall be responsible for supplying and placing all required signs and barricades. All signs and barricades, and their placement, shall conform to current M.U.T.C.D. and I.N.D.O.T. standards. All required traffic control measures shall be in place before work begins.",
 				"Erosion control measures complying with Bloomington Municipal Code 20.05.040 are required to be in place during the period of any earth disturbing activities, and remain in place until the site is stablized.",
-				"All bonding must remain current until a written release of such bonding is given by a representitive of the City of Bloomington Planning and Transportation Department.",
-				"Any work in a street shall conform to the City of Bloomington Street Cut Requirements. Copies of these requirements are available from Planning and Transportation Department. All damaged Public Improvements must be repaired to prior or improved conditions.",
-				"Any brick or inlaid limestone sidewalks, or brick surfaced streets, shall remain undisturbed, unless specific permission is given by a representitive of the Planning and Transportation Department. If they are disturbed the surface material shall be taken up, saved, and re-installed to City of Bloomington specifications. Backfill methods and materials must also meet these specifications.",
-				"Any damage to any underground facility or utility must be reported immediately to the City of Bloomington Planning and Transportation Department and the owner of the facility or utility (if known). If not, the permittee will be required to re-excavate the damaged facility or utility, at their expense, to demonstrate that repairs have been made to the satisfaction of the owner of the damaged facility or utility,",
-				"Any above ground appurtenances (line markers, switch boxes, meters, etc,), or structures, to be placed in the City Right of Way must be approved the City of Bloomington Planning and Transportation Department prior to installation.",
+				"All bonding must remain current until a written release of such bonding is given by a representitive of the City of Bloomington Engineering Department.",
+				"Any work in a street shall conform to the City of Bloomington Street Cut Requirements. Copies of these requirements are available from Engineering Department. All damaged Public Improvements must be repaired to prior or improved conditions.",
+				"Any brick or inlaid limestone sidewalks, or brick surfaced streets, shall remain undisturbed, unless specific permission is given by a representitive of the Engineering Department. If they are disturbed the surface material shall be taken up, saved, and re-installed to City of Bloomington specifications. Backfill methods and materials must also meet these specifications.",
+				"Any damage to any underground facility or utility must be reported immediately to the City of Bloomington Engineering Department and the owner of the facility or utility (if known). If not, the permittee will be required to re-excavate the damaged facility or utility, at their expense, to demonstrate that repairs have been made to the satisfaction of the owner of the damaged facility or utility,",
+				"Any above ground appurtenances (line markers, switch boxes, meters, etc,), or structures, to be placed in the City Right of Way must be approved the City of Bloomington Engineering Department prior to installation.",
 				"All existing regulatory signs (STOP, YIELD, NO PARKING, etc.) that are owned by the City of Bloomington shall be removed and replaced only by the City of Bloomington Traffic Division. Any regulatory signs removed, or installed, by the permittee are subject to removal or replacement by the Traffic Division with Permittee being billed for time and materials."
 
 		};
@@ -179,7 +179,7 @@ public class PermitPdf extends HttpServlet {
 						midTable.addCell(cell);
 						//
 						phrase = new Phrase();
-						ch = new Chunk("Planning and Transportation Department ",fntb);
+						ch = new Chunk("Engineering Department ",fntb);
 						phrase.add(ch);
 						cell = new PdfPCell(phrase);
 						cell.setBorder(Rectangle.NO_BORDER);
@@ -213,7 +213,7 @@ public class PermitPdf extends HttpServlet {
 						rightTable.addCell(cell);			
 						//
 						phrase = new Phrase();
-						ch = new Chunk("\n Phone: (812) 349-3423\nFax (812) 349-3520\nEmail: planning@bloomington.in.gov",fntb);
+						ch = new Chunk("\n Phone: (812) 349-3913\nFax (812) 349-3520\nEmail: engineering@bloomington.in.gov",fntb);
 						phrase.add(ch);
 						cell = new PdfPCell(phrase);
 						cell.setBorder(Rectangle.NO_BORDER);
